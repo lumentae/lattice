@@ -1,6 +1,6 @@
-package de.fynn93.servermod.util;
+package dev.lumentae.lattice.util;
 
-import de.fynn93.servermod.ServerMod;
+import dev.lumentae.lattice.Mod;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -9,9 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,13 +16,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
     public static ServerLevel getDimension(ResourceLocation resourceLocation) {
-        return ServerMod.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation));
+        return Mod.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation));
     }
 
     public static String getPlayerNameByUUID(UUID playerUUID) {
         AtomicReference<String> returnVal = new AtomicReference<>(playerUUID.toString());
         Objects.requireNonNull(
-                        ServerMod.getServer().getProfileCache()
+                        Mod.getServer().getProfileCache()
                 )
                 .get(playerUUID)
                 .ifPresent(profile ->
@@ -42,20 +39,5 @@ public class Utils {
                 return Double.valueOf(entry.modifier().amount()).intValue();
         }
         return 0;
-    }
-
-    public static String encryptAesECB(String input, String key) {
-        byte[] crypted = null;
-        try {
-            SecretKeySpec skey = new SecretKeySpec(key.getBytes(), "AES");
-
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, skey);
-            crypted = cipher.doFinal(input.getBytes());
-        } catch (Exception ignored) {
-        }
-
-        Base64.Encoder encoder = Base64.getEncoder();
-        return encoder.encodeToString(crypted);
     }
 }

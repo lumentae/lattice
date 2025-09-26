@@ -1,4 +1,4 @@
-package de.fynn93.servermod.mixin;
+package dev.lumentae.lattice.mixin;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -25,7 +25,7 @@ import java.util.Optional;
 @Mixin(value = HopperBlockEntity.class, priority = -10000)
 public class HopperBlockEntityMixin {
     @Unique
-    private static String getItemName(String translationKey) {
+    private static String lattice$getItemName(String translationKey) {
         if (translationKey == null) return null;
 
         String[] names = translationKey.split("\\.");
@@ -33,15 +33,15 @@ public class HopperBlockEntityMixin {
     }
 
     @Unique
-    private static boolean filterMatch(String filterString, String fullItemName, String itemCustomName) {
-        String itemName = getItemName(fullItemName);
+    private static boolean lattice$filterMatch(String filterString, String fullItemName, String itemCustomName) {
+        String itemName = lattice$getItemName(fullItemName);
         String[] filter = filterString.split(",");
         return Arrays.stream(filter).anyMatch((filter_i) -> {
             if (filter_i.startsWith("$")) {
                 // check for tag match
                 // format: $tag
                 // example: $cobblestone
-                return tagMatch(itemName, filter_i.substring(1));
+                return lattice$tagMatch(itemName, filter_i.substring(1));
             } else if (filter_i.startsWith("!")) {
                 // invert match
                 // example: !netherite_sword
@@ -50,14 +50,14 @@ public class HopperBlockEntityMixin {
                 // check for name match
                 // format: type=name
                 // example: netherite_sword=Destroyer of worlds
-                return nameMatch(itemName, filter_i, itemCustomName);
+                return lattice$nameMatch(itemName, filter_i, itemCustomName);
             }
             return FilenameUtils.wildcardMatch(itemName, filter_i);
         });
     }
 
     @Unique
-    private static boolean tagMatch(String itemName, String filterI) {
+    private static boolean lattice$tagMatch(String itemName, String filterI) {
         Optional<Reference<Item>> itemOptional = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(itemName));
         if (itemOptional.isEmpty()) return false;
 
@@ -74,7 +74,7 @@ public class HopperBlockEntityMixin {
     }
 
     @Unique
-    private static boolean nameMatch(String itemName, String filterI, String itemCustomName) {
+    private static boolean lattice$nameMatch(String itemName, String filterI, String itemCustomName) {
         Optional<Reference<Item>> itemOptional = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(itemName));
         if (itemOptional.isEmpty()) return false;
 
@@ -97,8 +97,8 @@ public class HopperBlockEntityMixin {
         if (itemEntity.getCustomName() != null) {
             itemCustomName = itemEntity.getCustomName().getString();
         }
-        String itemName = getItemName(itemEntity.getItem().getItem().getDescriptionId());
-        if (filterMatch(hopperBlockEntity.getCustomName().getString(), itemName, itemCustomName)) {
+        String itemName = lattice$getItemName(itemEntity.getItem().getItem().getDescriptionId());
+        if (lattice$filterMatch(hopperBlockEntity.getCustomName().getString(), itemName, itemCustomName)) {
             return;
         }
         cir.cancel();
@@ -111,10 +111,10 @@ public class HopperBlockEntityMixin {
             return;
         }
         String itemCustomName = "";
-        if (itemStack.getCustomName() != null) {
-            itemCustomName = itemStack.getCustomName().getString();
+        if (itemStack.getEntityRepresentation().getCustomName() != null) {
+            itemCustomName = itemStack.getEntityRepresentation().getCustomName().getString();
         }
-        if (filterMatch(hopperBlockEntity.getCustomName().getString(), getItemName(itemStack.getItem().getDescriptionId()), itemCustomName)) {
+        if (lattice$filterMatch(hopperBlockEntity.getCustomName().getString(), lattice$getItemName(itemStack.getItem().getDescriptionId()), itemCustomName)) {
             return;
         }
 

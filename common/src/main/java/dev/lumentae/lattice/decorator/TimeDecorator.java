@@ -1,4 +1,4 @@
-package de.fynn93.servermod.decorator;
+package dev.lumentae.lattice.decorator;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ChatDecorator;

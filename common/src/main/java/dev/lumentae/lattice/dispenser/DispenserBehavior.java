@@ -1,8 +1,7 @@
-package de.fynn93.servermod.dispenser;
+package dev.lumentae.lattice.dispenser;
 
-import de.fynn93.servermod.ServerMod;
-import de.fynn93.servermod.util.Utils;
-import net.fabricmc.fabric.api.entity.FakePlayer;
+import dev.lumentae.lattice.Mod;
+import dev.lumentae.lattice.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
@@ -46,7 +45,7 @@ public class DispenserBehavior {
                     manager.destroyBlock(relative);
 
                     // Reset durability
-                    if (!ServerMod.usesDurability) stack.setDamageValue(stack.getDamageValue() - 1);
+                    if (!Mod.usesDurability) stack.setDamageValue(stack.getDamageValue() - 1);
                 }
             } else if (stack.getItem() instanceof BlockItem) {
                 // Place block on top if the front

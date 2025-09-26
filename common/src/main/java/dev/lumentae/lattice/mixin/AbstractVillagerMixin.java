@@ -1,4 +1,4 @@
-package de.fynn93.servermod.mixin;
+package dev.lumentae.lattice.mixin;
 
 import net.minecraft.world.entity.npc.AbstractVillager;
 import org.spongepowered.asm.mixin.Mixin;

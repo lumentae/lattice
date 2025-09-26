@@ -1,4 +1,4 @@
-package de.fynn93.servermod.mixin;
+package dev.lumentae.lattice.mixin;
 
 import de.fynn93.servermod.ServerMod;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,4 +1,4 @@
-package de.fynn93.servermod;
+package dev.lumentae.lattice;
 
 import java.time.Instant;
 import java.util.Date;

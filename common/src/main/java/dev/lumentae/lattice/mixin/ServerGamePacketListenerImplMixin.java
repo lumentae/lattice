@@ -1,4 +1,4 @@
-package de.fynn93.servermod.mixin;
+package dev.lumentae.lattice.mixin;
 
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;

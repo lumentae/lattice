@@ -4,7 +4,16 @@
   "package": "dev.lumentae.lattice.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [],
+  "mixins": [
+    "AbstractVillagerMixin",
+    "HopperBlockEntityMixin",
+    "LeashableMixin",
+    "MinecraftServerMixin",
+    "PlayerMixin",
+    "ServerGamePacketListenerImplMixin",
+    "ServerPlayerMixin",
+    "ShearsDispenserBehaviorMixin"
+  ],
   "client": [
     "MixinMinecraft"
   ],
