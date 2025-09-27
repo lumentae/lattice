@@ -11,6 +11,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.lumentae.lattice.dispenser.DispenserBehavior;
 import dev.lumentae.lattice.platform.Services;
+import dev.lumentae.lattice.util.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.GlobalPos;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.commands.Commands.argument;
@@ -105,15 +107,17 @@ public class Event {
                         })
                         .executes(commandContext -> {
                             String action = StringArgumentType.getString(commandContext, "action");
+                            ServerPlayer player = commandContext.getSource().getPlayer();
+                            assert player != null;
                             switch (action) {
                                 case "save" -> {
                                     Config.saveConfig();
-                                    commandContext.getSource().sendSuccess(() -> Component.literal("Config saved"), true);
+                                    TextUtils.sendMessage(player, Component.literal("Config saved"));
                                     return Command.SINGLE_SUCCESS;
                                 }
                                 case "load" -> {
                                     Config.loadConfig();
-                                    commandContext.getSource().sendSuccess(() -> Component.literal("Config reloaded"), true);
+                                    TextUtils.sendMessage(player, Component.literal("Config loaded"));
                                     return Command.SINGLE_SUCCESS;
                                 }
                             }
