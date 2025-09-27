@@ -14,9 +14,6 @@
     "ServerPlayerMixin",
     "ShearsDispenserBehaviorMixin"
   ],
-  "client": [
-    "MixinMinecraft"
-  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

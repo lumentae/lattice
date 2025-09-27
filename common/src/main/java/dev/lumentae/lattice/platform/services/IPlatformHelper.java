@@ -1,5 +1,10 @@
 package dev.lumentae.lattice.platform.services;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.nio.file.Path;
+
 public interface IPlatformHelper {
 
     /**
@@ -32,4 +37,19 @@ public interface IPlatformHelper {
     default String getEnvironmentName() {
         return isDevelopmentEnvironment() ? "development" : "production";
     }
+
+    /**
+     * Gets the configuration directory path for the platform.
+     *
+     * @return The configuration directory path.
+     */
+    Path getConfigDirectory();
+
+    /**
+     * Gets a fake player instance for the given server.
+     *
+     * @param server The server to get the fake player for.
+     * @return A fake player instance.
+     */
+    ServerPlayer getFakePlayer(MinecraftServer server);
 }

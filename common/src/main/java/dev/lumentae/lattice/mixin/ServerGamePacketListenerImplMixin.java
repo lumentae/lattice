@@ -10,14 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin {
-    @Inject(method = "broadcastChatMessage", at = @At("HEAD"), cancellable = true)
+    // TODO: Review usefulness of this mixin?? Seems to just re-implement existing functionality.
+    //  It was used for discord integration, but that has been removed.
+    @Inject(method = "broadcastChatMessage", at = @At("HEAD"))
     public void broadcastChatMessage(PlayerChatMessage playerChatMessage, CallbackInfo ci) {
-        assert playerChatMessage.unsignedContent() != null;
-        ((ServerGamePacketListenerImpl) (Object) this).server.getPlayerList().broadcastSystemMessage(playerChatMessage.unsignedContent(), false);
-        this.detectRateSpam();
-        ci.cancel();
     }
-
-    @Shadow
-    protected abstract void detectRateSpam();
 }

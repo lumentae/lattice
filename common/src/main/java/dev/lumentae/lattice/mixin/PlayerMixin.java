@@ -1,6 +1,6 @@
 package dev.lumentae.lattice.mixin;
 
-import dev.lumentae.lattice.Mod;
+import dev.lumentae.lattice.Config;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ public class PlayerMixin {
         UUID uuid = player.getUUID();
 
         // Check if the player has the keepInventory option enabled
-        if (Mod.config.playerOptions.get(uuid).enableKeepInventory) {
+        if (Config.INSTANCE.playerOptions.get(uuid).enableKeepInventory) {
             ci.cancel();
         }
     }

@@ -5,6 +5,7 @@ import dev.lumentae.lattice.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class DispenserBehavior {
     @NotNull
-    public static DispenseItemBehavior getDispenserBehavior(FakePlayer player) {
+    public static DispenseItemBehavior getDispenserBehavior(ServerPlayer player) {
         ServerPlayerGameMode manager = new ServerPlayerGameMode(player);
         return (pointer, stack) -> {
             player.setServerLevel(pointer.level());
