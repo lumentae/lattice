@@ -25,6 +25,13 @@ public class Config {
      */
     public Map<UUID, String> nicknames = new HashMap<>();
 
+    /**
+     * A map of player UUIDs to their status messages
+     * <p>
+     * If a player does not have a status message set, their real name will be used
+     */
+    public Map<UUID, String> status = new HashMap<>();
+
     /** The date when the server will be opened
      * <p>
      * This is set to 24 hours from now by default
