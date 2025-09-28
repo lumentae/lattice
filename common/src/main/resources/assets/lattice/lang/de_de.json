@@ -8,5 +8,6 @@
   "message.lattice.lattice.save": "Config gespeichert",
   "message.lattice.nickname.set": "Dein Nickname wurde auf ",
   "message.lattice.nickname.none": "Du hast keinen Nickname gesetzt",
-  "message.lattice.nickname.show": "Dein Nickname ist "
+  "message.lattice.nickname.show": "Dein Nickname ist ",
+  "message.lattice.illegal_mods": "Du benutzt illegale Cheats. Bitte entferne die folgenden Mods/Resource Packs:"
 }

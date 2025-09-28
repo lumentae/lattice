@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Config {
     /**
@@ -46,17 +43,28 @@ public class Config {
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
 
+    public List<String> illegalMods = Arrays.asList(
+            "cheatbreaker",
+            "impact",
+            "lunar",
+            "meteor",
+            "nebulous",
+            "salhack",
+            "wurst",
+            "future",
+            "aristois",
+            "bape",
+            "xray",
+            "x-ray",
+            "freecam"
+    );
+
     public static class PlayerPlayOptions {
         /** Whether the player is allowed to use PvP
          * <p>
          * This is true by default
          */
         public boolean enablePvP = true;
-        /** Whether the player is allowed to keep their inventory on death
-         * <p>
-         * This is false by default
-         */
-        public boolean enableKeepInventory = false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

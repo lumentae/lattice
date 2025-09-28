@@ -9,5 +9,6 @@
     "message.lattice.nickname.set": "Your nickname has been set to ",
     "message.lattice.nickname.none": "You don't have a nickname set",
     "message.lattice.nickname.show": "Your nickname is ",
-    "message.lattice.nickname.removed": "Your nickname was removed"
+  "message.lattice.nickname.removed": "Your nickname was removed",
+  "message.lattice.illegal_mods": "You're using illegal cheats. Please remove the following mods/resource packs:"
 }

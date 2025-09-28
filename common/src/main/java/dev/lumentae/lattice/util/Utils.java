@@ -1,5 +1,6 @@
 package dev.lumentae.lattice.util;
 
+import dev.lumentae.lattice.Config;
 import dev.lumentae.lattice.Mod;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -44,5 +45,18 @@ public class Utils {
                 return Double.valueOf(entry.modifier().amount()).intValue();
         }
         return 0;
+    }
+
+    public static boolean containsIllegalMods(String mods) {
+        List<String> modsList = List.of(mods.toLowerCase().split("\\|"));
+
+        for (String illegalMod : Config.INSTANCE.illegalMods) {
+            for (String mod : modsList) {
+                if (mod.contains(illegalMod)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

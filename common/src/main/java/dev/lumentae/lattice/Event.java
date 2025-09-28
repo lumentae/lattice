@@ -25,6 +25,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.DispenserBlock;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -176,5 +177,23 @@ public class Event {
         Constants.LOG.info("Origin: {} ({})", packet.origin(), Utils.getPlayerNameByUUID(UUID.fromString(packet.origin())));
         Constants.LOG.info("Mods: {}", packet.mods());
         Constants.LOG.info("Resource Packs: {}", packet.resourcePacks());
+
+        if (Utils.containsIllegalMods(packet.mods()) || Utils.containsIllegalMods(packet.resourcePacks())) {
+            Constants.LOG.warn("Illegal mods or resource packs!");
+
+            var illegalMods = new ArrayList<>(packet.mods().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
+            illegalMods.addAll(packet.resourcePacks().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
+
+            ServerPlayer player = Utils.getPlayerByUUID(UUID.fromString(packet.origin()));
+            if (player != null) {
+                ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(
+                        Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
+                                .append(Component.literal("\n- "))
+                                .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED))
+                );
+                player.connection.send(kickPacket);
+                player.connection.disconnect(Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED));
+            }
+        }
     }
 }
