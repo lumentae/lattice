@@ -1,5 +1,7 @@
 package dev.lumentae.lattice;
 
+import dev.lumentae.lattice.packet.ServerboundModSharePacket;
+import dev.lumentae.lattice.platform.Services;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -17,6 +19,10 @@ public class Lattice implements ModInitializer {
             Event.OnRespawn(newPlayer);
         });
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            if (Services.PLATFORM.getSide().equals("client")) {
+                Constants.LOG.info("Sending mod/resource pack list to server");
+                PacketDistributor.sendToServer(ServerboundModSharePacket.create(handler.getPlayer()));
+            }
             Event.OnJoin(handler);
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

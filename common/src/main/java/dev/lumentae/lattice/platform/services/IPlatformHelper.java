@@ -4,6 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public interface IPlatformHelper {
 
@@ -52,4 +53,18 @@ public interface IPlatformHelper {
      * @return A fake player instance.
      */
     ServerPlayer getFakePlayer(MinecraftServer server);
+
+    /**
+     * Gets a list of loaded mods as strings.
+     *
+     * @return An ArrayList of loaded mod ids.
+     */
+    ArrayList<String> getModList();
+
+    /**
+     * Gets the side the code is running on (client or server).
+     *
+     * @return "client" if on the client side, "server" if on the server side.
+     */
+    String getSide();
 }

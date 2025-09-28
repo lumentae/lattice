@@ -1,8 +1,6 @@
 package dev.lumentae.lattice.mixin;
 
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -22,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(value = HopperBlockEntity.class, priority = -10000)
 public class HopperBlockEntityMixin {
@@ -41,7 +38,6 @@ public class HopperBlockEntityMixin {
         return Arrays.stream(filter).anyMatch((filter_i) -> {
             if (filter_i.startsWith("$")) {
                 // check for tag match
-                // format: $tag
                 // example: $cobblestone
                 return lattice$tagMatch(itemName, filter_i.substring(1));
             } else if (filter_i.startsWith("!")) {
@@ -50,7 +46,6 @@ public class HopperBlockEntityMixin {
                 return !FilenameUtils.wildcardMatch(itemName, filter_i.substring(1));
             } else if (filter_i.contains("=")) {
                 // check for name match
-                // format: type=name
                 // example: netherite_sword=Destroyer of worlds
                 return lattice$nameMatch(itemName, filter_i, itemCustomName);
             }
@@ -130,6 +125,7 @@ public class HopperBlockEntityMixin {
             return;
         }
         String itemCustomName = "";
+        assert itemStack.getEntityRepresentation() != null;
         if (itemStack.getEntityRepresentation().getCustomName() != null) {
             itemCustomName = itemStack.getEntityRepresentation().getCustomName().getString();
         }

@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimeDecorator implements ChatDecorator {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @Override
     public @NotNull MutableComponent decorate(@Nullable ServerPlayer serverPlayer, @NotNull Component component) {
-        String decoratedMessage = "[" + LocalDateTime.now().format(formatter) + "] ";
+        String decoratedMessage = "[" + LocalDateTime.now().format(formatter) + "]";
 
         return MutableComponent.create(
                 new PlainTextContents.LiteralContents(decoratedMessage)

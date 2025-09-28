@@ -1,0 +1,13 @@
+{
+    "message.lattice.server.closed.1": "The server isn't open yet!\n",
+    "message.lattice.server.closed.2": "The server will open at ",
+    "message.lattice.death.1": "You died at {",
+    "message.lattice.death.2": "}!",
+    "message.lattice.lattice.unknown": "Unknown action: ",
+    "message.lattice.lattice.reload": "Config reloaded",
+    "message.lattice.lattice.save": "Config saved",
+    "message.lattice.nickname.set": "Your nickname has been set to ",
+    "message.lattice.nickname.none": "You don't have a nickname set",
+    "message.lattice.nickname.show": "Your nickname is ",
+    "message.lattice.nickname.removed": "Your nickname was removed"
+}

@@ -10,6 +10,7 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
@@ -38,5 +39,17 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
         // from fabric's FakePlayer
         UUID defaultUUID = UUID.fromString("41C82C87-7AfB-4024-BA57-13D2C99CAE77");
         return new FakePlayer(server.overworld(), new GameProfile(defaultUUID, "[Minecraft]"));
+    }
+
+    @Override
+    public ArrayList<String> getModList() {
+        ArrayList<String> mods = new ArrayList<>();
+        ModList.get().getMods().forEach(modContainer -> mods.add(modContainer.getModId()));
+        return mods;
+    }
+
+    @Override
+    public String getSide() {
+        return FMLLoader.getDist().toString().toLowerCase();
     }
 }

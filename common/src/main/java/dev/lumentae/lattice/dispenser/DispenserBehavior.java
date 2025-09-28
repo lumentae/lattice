@@ -5,6 +5,7 @@ import dev.lumentae.lattice.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.tags.BlockTags;
@@ -24,19 +25,20 @@ public class DispenserBehavior {
     public static DispenseItemBehavior getDispenserBehavior(ServerPlayer player) {
         ServerPlayerGameMode manager = new ServerPlayerGameMode(player);
         return (pointer, stack) -> {
-            player.setServerLevel(pointer.level());
+            ServerLevel level = pointer.level();
+            player.setServerLevel(level);
             player.setItemInHand(player.getUsedItemHand(), stack);
 
             Direction direction = pointer.state().getValue(DispenserBlock.FACING);
             BlockPos relative = pointer.pos().relative(direction, 1);
-            List<LivingEntity> entities = pointer.level().getEntitiesOfClass(LivingEntity.class, new AABB(relative));
+            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, new AABB(relative));
             if ((stack.getItem().getDescriptionId().endsWith("_axe") || stack.getItem().getDescriptionId().endsWith("sword")) && !entities.isEmpty()) {
                 for (Entity entity : entities) {
                     int damage = Utils.getDamage(stack);
-                    entity.hurt(pointer.level().damageSources().generic(), damage);
+                    entity.hurt(level.damageSources().generic(), damage);
                 }
             } else if (stack.getItem().getDescriptionId().endsWith("axe") || stack.getItem().getDescriptionId().endsWith("shovel")) {
-                BlockState toBreak = pointer.level().getBlockState(relative);
+                BlockState toBreak = level.getBlockState(relative);
 
                 // Check if the block can be broken with a pickaxe, axe or shovel
                 if (toBreak.is(BlockTags.MINEABLE_WITH_PICKAXE) || // Pickaxe
@@ -50,10 +52,10 @@ public class DispenserBehavior {
                 }
             } else if (stack.getItem() instanceof BlockItem) {
                 // Place block on top if the front
-                Direction direction2 = pointer.level().isEmptyBlock(relative) ? direction : Direction.UP;
+                Direction direction2 = level.isEmptyBlock(relative) ? direction : Direction.UP;
 
                 try {
-                    ((BlockItem) stack.getItem()).place(new DirectionalPlaceContext(pointer.level(), relative, direction, stack, direction2));
+                    ((BlockItem) stack.getItem()).place(new DirectionalPlaceContext(level, relative, direction, stack, direction2));
                 } catch (Exception ignored) {
                 }
             }

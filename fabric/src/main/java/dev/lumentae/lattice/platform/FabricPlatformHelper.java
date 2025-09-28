@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     @Override
@@ -33,5 +34,19 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public ServerPlayer getFakePlayer(MinecraftServer server) {
         return FakePlayer.get(server.overworld());
+    }
+
+    @Override
+    public ArrayList<String> getModList() {
+        ArrayList<String> mods = new ArrayList<>();
+        FabricLoader.getInstance().getAllMods().forEach(modContainer -> {
+            mods.add(modContainer.getMetadata().getId());
+        });
+        return mods;
+    }
+
+    @Override
+    public String getSide() {
+        return FabricLoader.getInstance().getEnvironmentType().toString().toLowerCase();
     }
 }
