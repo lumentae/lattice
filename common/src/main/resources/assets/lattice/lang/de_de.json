@@ -1,13 +1,18 @@
 {
-  "message.lattice.server.closed.1": "Der Server ist noch nicht geöffnet!\n",
-  "message.lattice.server.closed.2": "Der Server öffnet am ",
   "message.lattice.death.1": "Du bist bei {",
   "message.lattice.death.2": "} gestorben!",
-  "message.lattice.lattice.unknown": "Unbekannte aktion: ",
+  "message.lattice.illegal_mods": "Du benutzt illegale Cheats. Bitte entferne die folgenden Mods/Resource Packs:",
   "message.lattice.lattice.reload": "Config neu geladen",
   "message.lattice.lattice.save": "Config gespeichert",
-  "message.lattice.nickname.set": "Dein Nickname wurde auf ",
+  "message.lattice.lattice.unknown": "Unbekannte aktion: ",
   "message.lattice.nickname.none": "Du hast keinen Nickname gesetzt",
+  "message.lattice.nickname.removed": "Dein nickname wurde entfernt",
+  "message.lattice.nickname.set": "Dein Nickname ist nun ",
   "message.lattice.nickname.show": "Dein Nickname ist ",
-  "message.lattice.illegal_mods": "Du benutzt illegale Cheats. Bitte entferne die folgenden Mods/Resource Packs:"
+  "message.lattice.server.closed.1": "Der Server ist noch nicht geöffnet!\n",
+  "message.lattice.server.closed.2": "Der Server öffnet am ",
+  "message.lattice.status.none": "Du hast keinen Status gesetzt",
+  "message.lattice.status.removed": "Dein status wurde entfernt",
+  "message.lattice.status.set": "Dein Status ist nun ",
+  "message.lattice.status.show": "Dein Status ist "
 }

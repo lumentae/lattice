@@ -1,6 +1,7 @@
 package dev.lumentae.lattice.util;
 
 import dev.lumentae.lattice.Constants;
+import dev.lumentae.lattice.Mod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -54,6 +55,23 @@ public class TextUtils {
             result.append(part);
         }
 
+        return result;
+    }
+
+    public static Component parseColoredText(String text) {
+        if (text.isEmpty()) {
+            return Component.literal("");
+        }
+
+        // Remove surrounding quotes if present
+        if ((text.startsWith("\"") && text.endsWith("\"")) || (text.startsWith("'") && text.endsWith("'"))) {
+            text = text.substring(1, text.length() - 1);
+        }
+
+        MutableComponent result = Component.Serializer.fromJson(text, Mod.getServer().registryAccess());
+        if (result == null) {
+            result = Component.literal(text);
+        }
         return result;
     }
 }

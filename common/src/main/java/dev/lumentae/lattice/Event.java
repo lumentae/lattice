@@ -7,6 +7,7 @@ import dev.lumentae.lattice.dispenser.DispenserBehavior;
 import dev.lumentae.lattice.nickname.NicknameManager;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import dev.lumentae.lattice.platform.Services;
+import dev.lumentae.lattice.status.StatusManager;
 import dev.lumentae.lattice.util.TextUtils;
 import dev.lumentae.lattice.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -126,7 +127,6 @@ public class Event {
                 )
         );
         dispatcher.register(literal("nick")
-                .requires(source -> source.hasPermission(2))
                 .then(argument("nickname", StringArgumentType.word())
                         .suggests((context, builder) -> {
                             ServerPlayer player = context.getSource().getPlayer();
@@ -165,6 +165,47 @@ public class Event {
                     } else {
                         TextUtils.sendMessage(player, Component.translatable("message.lattice.nickname.show").append(
                                 Component.literal(name).withStyle(ChatFormatting.GREEN)
+                        ));
+                    }
+                    return Command.SINGLE_SUCCESS;
+                })
+        );
+        dispatcher.register(literal("status")
+                .then(argument("status", StringArgumentType.greedyString())
+                        .suggests((context, builder) -> {
+                            builder.suggest("reset");
+                            return builder.buildFuture();
+                        })
+                        .executes(commandContext -> {
+                            String status = StringArgumentType.getString(commandContext, "status");
+
+                            ServerPlayer player = commandContext.getSource().getPlayer();
+                            assert player != null;
+
+                            if (status.equals("reset")) {
+                                StatusManager.removeStatus(player);
+                                TextUtils.sendMessage(player, Component.translatable("message.lattice.status.removed").withStyle(ChatFormatting.GREEN));
+                                return Command.SINGLE_SUCCESS;
+                            }
+
+                            StatusManager.setStatus(player, status);
+                            TextUtils.sendMessage(player, Component.translatable("message.lattice.status.set").append(
+                                    TextUtils.parseColoredText(status)
+                            ));
+
+                            return Command.SINGLE_SUCCESS;
+                        })
+                )
+                .executes(context -> {
+                    ServerPlayer player = context.getSource().getPlayer();
+                    assert player != null;
+
+                    String status = Config.INSTANCE.status.get(player.getUUID());
+                    if (status == null) {
+                        TextUtils.sendMessage(player, Component.translatable("message.lattice.status.none").withStyle(ChatFormatting.RED));
+                    } else {
+                        TextUtils.sendMessage(player, Component.translatable("message.lattice.status.show").append(
+                                Component.literal(status)
                         ));
                     }
                     return Command.SINGLE_SUCCESS;

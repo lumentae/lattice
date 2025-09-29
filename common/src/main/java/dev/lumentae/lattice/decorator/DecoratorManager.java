@@ -3,7 +3,6 @@ package dev.lumentae.lattice.decorator;
 import dev.lumentae.lattice.nickname.NicknameManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
-import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,6 @@ public class DecoratorManager implements ChatDecorator {
         MutableComponent base = Component.empty();
         for (ChatDecorator decorator : decorators) {
             base.append(decorator.decorate(serverPlayer, component));
-            base.append(MutableComponent.create(new PlainTextContents.LiteralContents(" ")).withStyle(ChatFormatting.RESET));
         }
 
         // Append player name

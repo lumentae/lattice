@@ -1,6 +1,8 @@
 package dev.lumentae.lattice.status;
 
 import dev.lumentae.lattice.Config;
+import dev.lumentae.lattice.util.TextUtils;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public class StatusManager {
@@ -8,9 +10,9 @@ public class StatusManager {
         Config.INSTANCE.status.put(player.getUUID(), status);
     }
 
-    public static net.minecraft.network.chat.Component getStatus(ServerPlayer player) {
+    public static Component getStatus(ServerPlayer player) {
         String status = Config.INSTANCE.status.getOrDefault(player.getUUID(), "");
-        return net.minecraft.network.chat.Component.literal(status);
+        return TextUtils.parseColoredText(status);
     }
 
     public static void removeStatus(ServerPlayer player) {

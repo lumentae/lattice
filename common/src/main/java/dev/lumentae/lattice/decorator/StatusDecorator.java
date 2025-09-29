@@ -21,8 +21,9 @@ public class StatusDecorator implements ChatDecorator {
             return Component.literal("");
         }
 
-        return Component.literal("[").withStyle(ChatFormatting.GRAY)
+        return Component.literal("[")
                 .append(status)
-                .append(Component.literal("]").withStyle(ChatFormatting.GRAY));
+                .append(Component.literal("] "))
+                .withStyle(ChatFormatting.RESET);
     }
 }
