@@ -1,6 +1,7 @@
 {
-  "message.lattice.death.1": "You died at {",
-  "message.lattice.death.2": "}!",
+  "message.lattice.death.1": "You died at ",
+  "message.lattice.death.2": "!",
+  "message.lattice.end_closed": "The end is currently closed! It will open at",
   "message.lattice.illegal_mods": "You're using illegal cheats. Please remove the following mods/resource packs:",
   "message.lattice.lattice.reload": "Config reloaded",
   "message.lattice.lattice.save": "Config saved",

@@ -9,6 +9,7 @@
     "HopperBlockEntityMixin",
     "LeashableMixin",
     "MinecraftServerMixin",
+    "PortalProcessorMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",
     "ShearsDispenserBehaviorMixin"

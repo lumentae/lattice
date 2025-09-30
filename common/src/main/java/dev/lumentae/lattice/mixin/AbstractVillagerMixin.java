@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class AbstractVillagerMixin {
     @Inject(at = @At("HEAD"), method = "canBeLeashed", cancellable = true)
     public void canBeLeashed(CallbackInfoReturnable<Boolean> cir) {
-        cir.cancel();
         cir.setReturnValue(true);
     }
 }
