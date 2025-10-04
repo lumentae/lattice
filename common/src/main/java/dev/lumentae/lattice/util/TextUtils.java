@@ -58,6 +58,10 @@ public class TextUtils {
         return result;
     }
 
+    public static MutableComponent fromString(String text) {
+        return Component.Serializer.fromJson(text, Mod.getServer().registryAccess());
+    }
+
     public static Component parseColoredText(String text) {
         if (text.isEmpty()) {
             return Component.literal("");
@@ -68,7 +72,7 @@ public class TextUtils {
             text = text.substring(1, text.length() - 1);
         }
 
-        MutableComponent result = Component.Serializer.fromJson(text, Mod.getServer().registryAccess());
+        MutableComponent result = fromString(text);
         if (result == null) {
             result = Component.literal(text);
         }

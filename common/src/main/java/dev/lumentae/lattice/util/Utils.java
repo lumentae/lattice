@@ -59,4 +59,15 @@ public class Utils {
         }
         return false;
     }
+
+    public static ServerPlayer getRandomPlayer() {
+        List<ServerPlayer> players = Mod.getServer().getPlayerList().getPlayers();
+        if (players.isEmpty()) return null;
+
+        return players.get((int) (Math.random() * players.size()));
+    }
+
+    public static <T> T getRandom(List<T> obj) {
+        return obj.get((int) (Math.random() * obj.size()));
+    }
 }

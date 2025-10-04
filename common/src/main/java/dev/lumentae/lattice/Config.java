@@ -66,6 +66,16 @@ public class Config {
             "freecam"
     );
 
+    /**
+     * A list of MOTDs to be displayed to players when they join the server
+     */
+    public ArrayList<String> motds;
+
+    /**
+     * A list of player names to be used in MOTDs when a player is offline
+     */
+    public ArrayList<String> offlineMotdPlayerNames;
+
     public static class PlayerPlayOptions {
         /** Whether the player is allowed to use PvP
          * <p>
