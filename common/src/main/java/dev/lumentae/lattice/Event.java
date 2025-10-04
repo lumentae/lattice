@@ -159,7 +159,7 @@ public class Event {
                     ServerPlayer player = context.getSource().getPlayer();
                     assert player != null;
 
-                    String name = Config.INSTANCE.nicknames.get(player.getUUID());
+                    String name = Config.getPlayerPlayOptions(player.getUUID()).nickname;
                     if (name == null) {
                         TextUtils.sendMessage(player, Component.translatable("message.lattice.nickname.none").withStyle(ChatFormatting.RED));
                     } else {
@@ -200,7 +200,7 @@ public class Event {
                     ServerPlayer player = context.getSource().getPlayer();
                     assert player != null;
 
-                    String status = Config.INSTANCE.status.get(player.getUUID());
+                    String status = Config.getPlayerPlayOptions(player.getUUID()).status;
                     if (status == null) {
                         TextUtils.sendMessage(player, Component.translatable("message.lattice.status.none").withStyle(ChatFormatting.RED));
                     } else {

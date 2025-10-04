@@ -5,18 +5,29 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class NicknameManager {
     public static void setNickname(ServerPlayer player, String nickname) {
-        Config.INSTANCE.nicknames.put(player.getUUID(), nickname);
+        Config.PlayerPlayOptions options = Config.getPlayerPlayOptions(player.getUUID());
+        options.nickname = nickname;
+
+        Config.setPlayerPlayOptions(player.getUUID(), options);
     }
 
     public static String getNickname(ServerPlayer player) {
-        String nickName = Config.INSTANCE.nicknames.getOrDefault(player.getUUID(), player.getName().getString());
-        if (!nickName.equals(player.getName().getString())) {
+        String nickName = Config.getPlayerPlayOptions(player.getUUID()).nickname;
+        String playerName = player.getName().getString();
+        if (nickName == null) {
+            nickName = playerName;
+        }
+
+        if (!nickName.equals(playerName)) {
             nickName = "~" + nickName;
         }
         return nickName;
     }
 
     public static void removeNickname(ServerPlayer player) {
-        Config.INSTANCE.nicknames.remove(player.getUUID());
+        Config.PlayerPlayOptions options = Config.getPlayerPlayOptions(player.getUUID());
+        options.nickname = null;
+
+        Config.setPlayerPlayOptions(player.getUUID(), options);
     }
 }

@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ServerPlayerMixin {
     @Inject(method = "canHarmPlayer", at = @At("HEAD"), cancellable = true)
     public void canHarmPlayer(Player other, CallbackInfoReturnable<Boolean> cir) {
-        boolean thisPvP = Config.INSTANCE.playerOptions.get(((ServerPlayer) (Object) this).getUUID()).enablePvP;
-        boolean otherPvP = Config.INSTANCE.playerOptions.get(other.getUUID()).enablePvP;
+        boolean thisPvP = Config.getPlayerPlayOptions(((ServerPlayer) (Object) this).getUUID()).enablePvP;
+        boolean otherPvP = Config.getPlayerPlayOptions(other.getUUID()).enablePvP;
 
         if (!thisPvP || !otherPvP) {
             cir.setReturnValue(false);

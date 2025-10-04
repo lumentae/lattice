@@ -18,20 +18,6 @@ public class Config {
      */
     public Map<UUID, PlayerPlayOptions> playerOptions = new HashMap<>();
 
-    /**
-     * A map of player UUIDs to their nicknames
-     * <p>
-     * If a player does not have a nickname set, their real name will be used
-     */
-    public Map<UUID, String> nicknames = new HashMap<>();
-
-    /**
-     * A map of player UUIDs to their status messages
-     * <p>
-     * If a player does not have a status message set, their real name will be used
-     */
-    public Map<UUID, String> status = new HashMap<>();
-
     /** The date when the server will be opened
      * <p>
      * This is set to 24 hours from now by default
@@ -46,7 +32,7 @@ public class Config {
 
     /** The default play options for players
      * <p>
-     * These options will be used if a player does not have any options set
+     * These options will be used if a player does not have any option set
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
 
@@ -76,12 +62,16 @@ public class Config {
      */
     public ArrayList<String> offlineMotdPlayerNames;
 
-    public static class PlayerPlayOptions {
-        /** Whether the player is allowed to use PvP
-         * <p>
-         * This is true by default
-         */
-        public boolean enablePvP = true;
+    public static void loadConfig() {
+        try {
+            // Create a config file if it doesn't exist
+            if (!configFilePath.toFile().exists()) {
+                Files.writeString(configFilePath, gson.toJson(new Config()));
+            }
+
+            INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
+        } catch (IOException ignored) {
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,21 +86,42 @@ public class Config {
             .serializeNulls()
             .create();
 
-    public static void loadConfig() {
-        try {
-            // Create config file if it doesn't exist
-            if (!configFilePath.toFile().exists()) {
-                Files.writeString(configFilePath, gson.toJson(new Config()));
-            }
-
-            INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
-        } catch (IOException ignored) {
-        }
+    public static PlayerPlayOptions getPlayerPlayOptions(UUID uuid) {
+        return INSTANCE.playerOptions.computeIfAbsent(uuid, k -> new PlayerPlayOptions());
     }
+
     public static void saveConfig() {
         try {
             Files.writeString(configFilePath, gson.toJson(INSTANCE));
         } catch (IOException ignored) {
         }
+    }
+
+    public static void setPlayerPlayOptions(UUID uuid, PlayerPlayOptions options) {
+        INSTANCE.playerOptions.put(uuid, options);
+        saveConfig();
+    }
+
+    public static void removePlayerPlayOptions(UUID uuid) {
+        INSTANCE.playerOptions.remove(uuid);
+        saveConfig();
+    }
+
+    public static class PlayerPlayOptions {
+        /** Whether the player is allowed to use PvP
+         * <p>
+         * This is true by default
+         */
+        public boolean enablePvP = true;
+
+        /*
+         * The player's nickname
+         */
+        public String nickname = null;
+
+        /*
+         * The player's status message
+         */
+        public String status = "";
     }
 }

@@ -7,15 +7,21 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class StatusManager {
     public static void setStatus(ServerPlayer player, String status) {
-        Config.INSTANCE.status.put(player.getUUID(), status);
+        Config.PlayerPlayOptions options = Config.getPlayerPlayOptions(player.getUUID());
+        options.status = status;
+
+        Config.setPlayerPlayOptions(player.getUUID(), options);
     }
 
     public static Component getStatus(ServerPlayer player) {
-        String status = Config.INSTANCE.status.getOrDefault(player.getUUID(), "");
+        String status = Config.getPlayerPlayOptions(player.getUUID()).status;
         return TextUtils.parseColoredText(status);
     }
 
     public static void removeStatus(ServerPlayer player) {
-        Config.INSTANCE.status.remove(player.getUUID());
+        Config.PlayerPlayOptions options = Config.getPlayerPlayOptions(player.getUUID());
+        options.status = "";
+
+        Config.setPlayerPlayOptions(player.getUUID(), options);
     }
 }
