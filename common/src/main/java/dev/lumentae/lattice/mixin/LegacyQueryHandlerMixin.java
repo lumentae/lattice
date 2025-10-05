@@ -12,6 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LegacyQueryHandlerMixin {
     @Inject(method = "channelRead", at = @At("HEAD"))
     private void lattice$channelRead(ChannelHandlerContext context, Object message, CallbackInfo ci) {
-        MotdManager.changeMotd();
+        try {
+            MotdManager.changeMotd();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

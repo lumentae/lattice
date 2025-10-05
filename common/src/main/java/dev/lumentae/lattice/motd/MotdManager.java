@@ -13,6 +13,9 @@ public class MotdManager {
     }
 
     private static String getRandomMotd() {
+        if (Config.INSTANCE.motds == null || Config.INSTANCE.motds.isEmpty()) {
+            return Mod.getServer().getMotd();
+        }
         return Config.INSTANCE.motds.get((int) (Math.random() * Config.INSTANCE.motds.size()));
     }
 
@@ -21,9 +24,13 @@ public class MotdManager {
             return motd;
         }
 
-        String playerName = "";
+        String playerName;
         if (Mod.getServer().getPlayerList().getPlayers().size() <= 2) {
-            playerName = Utils.getRandom(Config.INSTANCE.offlineMotdPlayerNames);
+            if (Config.INSTANCE.offlineMotdPlayerNames == null || Config.INSTANCE.offlineMotdPlayerNames.isEmpty()) {
+                playerName = "Player";
+            } else {
+                playerName = Utils.getRandom(Config.INSTANCE.offlineMotdPlayerNames);
+            }
         } else {
             ServerPlayer randomPlayer = Utils.getRandomPlayer();
             assert randomPlayer != null;
