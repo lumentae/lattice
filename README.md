@@ -1,4 +1,7 @@
 # Lattice
+> [!IMPORTANT]  
+> Fabric doesn't work anymore in v1.2.0 and up!
+
 Lattice is a Minecraft mod intended to be used on SMP servers to manage many useful features for players
 
 ## Features
