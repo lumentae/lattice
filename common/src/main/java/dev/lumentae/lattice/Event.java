@@ -8,6 +8,7 @@ import dev.lumentae.lattice.nickname.NicknameManager;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import dev.lumentae.lattice.platform.Services;
 import dev.lumentae.lattice.status.StatusManager;
+import dev.lumentae.lattice.util.PacketUtils;
 import dev.lumentae.lattice.util.TextUtils;
 import dev.lumentae.lattice.util.Utils;
 import net.minecraft.ChatFormatting;
@@ -24,6 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.ArrayList;
@@ -236,5 +238,9 @@ public class Event {
                 player.connection.disconnect(Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED));
             }
         }
+    }
+
+    public static void OnShareMods(Player player) {
+        PacketUtils.sendToServer(ServerboundModSharePacket.create(player));
     }
 }

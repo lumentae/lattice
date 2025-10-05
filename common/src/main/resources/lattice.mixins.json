@@ -16,6 +16,9 @@
     "ShearsDispenserBehaviorMixin"
   ],
   "server": [],
+  "client": [
+    "PackRepositoryMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

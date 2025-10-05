@@ -35,7 +35,7 @@ public class PortalProcessorMixin {
         if (transition.newLevel().dimension() == Level.END && Config.INSTANCE.endOpenDate.after(new Date()) && entity instanceof ServerPlayer player) {
             TextUtils.sendMessage(player, Component.translatable("message.lattice.end_closed")
                     .append(" ")
-                    .append(Component.literal("(" + Config.INSTANCE.endOpenDate + ")")
+                    .append(Component.literal(String.valueOf(Config.INSTANCE.endOpenDate))
                             .withStyle(
                                     (style) -> style.withItalic(true)
                             )

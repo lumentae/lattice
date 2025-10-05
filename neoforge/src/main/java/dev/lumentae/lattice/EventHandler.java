@@ -1,6 +1,7 @@
 package dev.lumentae.lattice;
 
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
+import dev.lumentae.lattice.util.PacketUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -11,7 +12,6 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -46,7 +46,7 @@ public class EventHandler {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onClientLogin(ClientPlayerNetworkEvent.LoggingIn event) {
-        PacketDistributor.sendToServer(ServerboundModSharePacket.create(event.getPlayer()));
+        PacketUtils.sendToServer(ServerboundModSharePacket.create(event.getPlayer()));
     }
 
     @SubscribeEvent
