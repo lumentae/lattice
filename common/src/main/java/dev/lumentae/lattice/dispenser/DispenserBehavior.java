@@ -9,10 +9,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -24,10 +26,11 @@ public class DispenserBehavior {
     @NotNull
     public static DispenseItemBehavior getDispenserBehavior(ServerPlayer player) {
         ServerPlayerGameMode manager = new ServerPlayerGameMode(player);
+        manager.changeGameModeForPlayer(GameType.SURVIVAL);
         return (pointer, stack) -> {
             ServerLevel level = pointer.level();
             player.setServerLevel(level);
-            player.setItemInHand(player.getUsedItemHand(), stack);
+            player.setItemInHand(InteractionHand.MAIN_HAND, stack);
 
             Direction direction = pointer.state().getValue(DispenserBlock.FACING);
             BlockPos relative = pointer.pos().relative(direction, 1);

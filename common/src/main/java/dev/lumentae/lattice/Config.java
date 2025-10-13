@@ -18,24 +18,25 @@ public class Config {
      */
     public Map<UUID, PlayerPlayOptions> playerOptions = new HashMap<>();
 
-    /** The date when the server will be opened
-     * <p>
-     * This is set to 24 hours from now by default
-     */
-    public Date serverOpenDate = Date.from(Instant.now().plusSeconds(60 * 60 * 24));
-
-    /** The date when the end will be opened
-     * <p>
-     * This is set to 10 days after the server is opened
-     */
-    public Date endOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 10));
-
-    /** The default play options for players
+    /**
+     * The default play options for players
      * <p>
      * These options will be used if a player does not have any option set
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
-
+    /**
+     * The date when the server will be opened
+     */
+    public Date serverOpenDate = Date.from(Instant.now());
+    /**
+     * The date when the end will be opened
+     * <p>
+     * This is set to 10 days after the server is opened
+     */
+    public Date endOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 10));
+    /**
+     * A list of illegal mods that should not be allowed
+     */
     public List<String> illegalMods = Arrays.asList(
             "cheatbreaker",
             "impact",
@@ -50,6 +51,13 @@ public class Config {
             "xray",
             "x-ray",
             "freecam"
+    );
+
+    /**
+     * A list of mods that should be allowlisted
+     */
+    public List<String> allowedMods = List.of(
+            "antixray"
     );
 
     /**
@@ -72,6 +80,32 @@ public class Config {
             INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
         } catch (IOException ignored) {
         }
+    }
+
+    /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static class PlayerPlayOptions {
+        /**
+         * Whether the player is allowed to use PvP
+         * <p>
+         * This is true by default
+         */
+        public boolean enablePvP = true;
+
+        /*
+         * The player's nickname
+         */
+        public String nickname = null;
+
+        /*
+         * The player's status message
+         */
+        public String status = "";
+
+        /**
+         * Whether the player has accepted the rules
+         */
+        public boolean acceptedRules = false;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,21 +141,5 @@ public class Config {
         saveConfig();
     }
 
-    public static class PlayerPlayOptions {
-        /** Whether the player is allowed to use PvP
-         * <p>
-         * This is true by default
-         */
-        public boolean enablePvP = true;
 
-        /*
-         * The player's nickname
-         */
-        public String nickname = null;
-
-        /*
-         * The player's status message
-         */
-        public String status = "";
-    }
 }

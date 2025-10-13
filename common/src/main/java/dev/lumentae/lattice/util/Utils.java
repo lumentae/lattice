@@ -52,7 +52,7 @@ public class Utils {
 
         for (String illegalMod : Config.INSTANCE.illegalMods) {
             for (String mod : modsList) {
-                if (mod.contains(illegalMod)) {
+                if (mod.contains(illegalMod) && !Config.INSTANCE.allowedMods.contains(mod)) {
                     return true;
                 }
             }

@@ -104,7 +104,6 @@ public class Event {
                             builder.suggest("save");
                             builder.suggest("reload");
                             return builder.buildFuture();
-
                         })
                         .executes(commandContext -> {
                             String action = StringArgumentType.getString(commandContext, "action");
@@ -231,13 +230,13 @@ public class Event {
 
             ServerPlayer player = Utils.getPlayerByUUID(UUID.fromString(packet.origin()));
             if (player != null) {
-                ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(
-                        Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
-                                .append(Component.literal("\n- "))
-                                .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED))
-                );
+                Component reason = Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
+                        .append(Component.literal("\n- "))
+                        .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED));
+
+                ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(reason);
                 player.connection.send(kickPacket);
-                player.connection.disconnect(Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED));
+                player.connection.disconnect(reason);
             }
         }
     }
