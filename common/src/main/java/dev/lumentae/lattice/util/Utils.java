@@ -24,11 +24,11 @@ public class Utils {
     public static String getPlayerNameByUUID(UUID playerUUID) {
         AtomicReference<String> returnVal = new AtomicReference<>(playerUUID.toString());
         Objects.requireNonNull(
-                        Mod.getServer().getProfileCache()
+                        Mod.getServer().services().profileResolver()
                 )
-                .get(playerUUID)
+                .fetchById(playerUUID)
                 .ifPresent(profile ->
-                        returnVal.set(profile.getName())
+                        returnVal.set(profile.name())
                 );
         return returnVal.get();
     }

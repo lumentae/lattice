@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = Constants.MOD_ID)
@@ -49,16 +49,17 @@ public class EventHandler {
         PacketUtils.sendToServer(ServerboundModSharePacket.create(event.getPlayer()));
     }
 
+    public static void handleDataOnMain(final ServerboundModSharePacket data, final IPayloadContext context) {
+        context.enqueueWork(() -> Event.OnModSharePacket(data));
+    }
+
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.commonToServer(
                 ServerboundModSharePacket.TYPE,
                 ServerboundModSharePacket.STREAM_CODEC,
-                new DirectionalPayloadHandler<>(
-                        (packet, context) -> context.enqueueWork(() -> Event.OnModSharePacket(packet)),
-                        (packet, context) -> context.enqueueWork(() -> Event.OnModSharePacket(packet))
-                )
+                EventHandler::handleDataOnMain
         );
     }
 }

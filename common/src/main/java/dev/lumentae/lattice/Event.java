@@ -68,7 +68,7 @@ public class Event {
 
     public static void OnJoin(ServerGamePacketListenerImpl handler) {
         ServerPlayer player = handler.getPlayer();
-        if (player.level().isClientSide) return;
+        if (player.level().isClientSide()) return;
 
         Config.INSTANCE.playerOptions.computeIfAbsent(player.getUUID(), k -> Config.DEFAULT_PLAY_OPTIONS);
         if (Config.INSTANCE.serverOpenDate.after(new Date()) && !player.hasPermissions(2)) {
