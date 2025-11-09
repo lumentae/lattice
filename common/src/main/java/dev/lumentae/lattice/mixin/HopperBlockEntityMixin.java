@@ -1,9 +1,9 @@
 package dev.lumentae.lattice.mixin;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -17,9 +17,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(value = HopperBlockEntity.class, priority = -10000)
 public class HopperBlockEntityMixin {
@@ -55,23 +55,7 @@ public class HopperBlockEntityMixin {
 
     @Unique
     private static boolean lattice$tagMatch(String itemName, String filterI) {
-        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(itemName));
-
-        List<Field> fields = Arrays.stream(ItemTags.class.getFields()).toList();
-        for (Field field : fields) {
-            String name = field.getName();
-            String filter = filterI.toUpperCase();
-
-            if (!name.equals(filter)) continue;
-            try {
-                TagKey<Item> tag = (TagKey<Item>) field.get(null);
-                return new ItemStack(item).is(tag);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        /* >= 1.21.3
-        Optional<Reference<Item>> itemOptional = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(itemName));
+        Optional<Holder.Reference<Item>> itemOptional = BuiltInRegistries.ITEM.get(ResourceLocation.withDefaultNamespace(itemName));
         if (itemOptional.isEmpty()) return false;
 
         Holder<Item> item = itemOptional.get();
@@ -81,7 +65,7 @@ public class HopperBlockEntityMixin {
             if (tag.location().getPath().equals(filterI)) {
                 return true;
             }
-        }*/
+        }
 
         return false;
     }
