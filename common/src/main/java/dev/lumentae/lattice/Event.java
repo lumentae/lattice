@@ -90,8 +90,8 @@ public class Event {
         if (Utils.containsIllegalMods(packet.mods()) || Utils.containsIllegalMods(packet.resourcePacks())) {
             Constants.LOG.warn("Illegal mods or resource packs!");
 
-            var illegalMods = new ArrayList<>(packet.mods().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
-            illegalMods.addAll(packet.resourcePacks().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
+            var illegalMods = new ArrayList<>(packet.mods().lines().filter(Utils::containsIllegalMods).toList());
+            illegalMods.addAll(packet.resourcePacks().lines().filter(Utils::containsIllegalMods).toList());
 
             ServerPlayer player = Utils.getPlayerByUUID(UUID.fromString(packet.origin()));
             if (player == null)

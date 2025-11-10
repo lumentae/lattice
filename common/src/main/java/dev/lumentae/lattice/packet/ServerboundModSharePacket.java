@@ -27,8 +27,8 @@ public record ServerboundModSharePacket(String origin, String mods, String resou
     }
 
     public static ServerboundModSharePacket create(Player player) {
-        String modList = String.join("|", Services.PLATFORM.getModList());
-        String resourcePackList = String.join("|", Minecraft.getInstance().getResourcePackRepository().getSelectedIds());
+        String modList = String.join("\n", Services.PLATFORM.getModList());
+        String resourcePackList = String.join("\n", Minecraft.getInstance().getResourcePackRepository().getSelectedIds());
 
         return new ServerboundModSharePacket(player.getUUID().toString(), modList, resourcePackList);
     }
