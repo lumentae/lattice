@@ -1,5 +1,6 @@
 package dev.lumentae.lattice;
 
+import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import dev.lumentae.lattice.platform.Services;
 import net.fabricmc.api.ModInitializer;
@@ -34,5 +35,6 @@ public class Lattice implements ModInitializer {
         });
 
         ServerPlayNetworking.registerGlobalReceiver(ServerboundModSharePacket.TYPE, (payload, context) -> Event.OnModSharePacket(payload));
+        ServerPlayNetworking.registerGlobalReceiver(ServerboundAcceptedRulesPacket.TYPE, (payload, context) -> Event.OnAcceptedRulesPacket(payload, context.player()));
     }
 }

@@ -1,18 +1,16 @@
 package dev.lumentae.lattice.util;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import dev.lumentae.lattice.Constants;
-import dev.lumentae.lattice.Mod;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.StrictJsonParser;
 
 public class TextUtils {
     public static void sendMessage(ServerPlayer player, MutableComponent message) {
@@ -64,19 +62,12 @@ public class TextUtils {
         return result;
     }
 
-    public static MutableComponent fromString(String text) {
-        return fromJson(text, Mod.getServer().registryAccess());
-    }
-
-    // From Component.Serializer
-    public static MutableComponent fromJson(String json, HolderLookup.Provider registries) {
-        JsonElement jsonelement = JsonParser.parseString(json);
-        return jsonelement == null ? null : deserialize(jsonelement, registries);
-    }
-
-    // From Component.Serializer
-    public static MutableComponent deserialize(JsonElement json, HolderLookup.Provider provider) {
-        return (MutableComponent) ComponentSerialization.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), json).getOrThrow(JsonParseException::new);
+    public static Component fromString(String text) {
+        JsonElement jsonelement = StrictJsonParser.parse(text);
+        return ComponentSerialization.CODEC
+                .parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), jsonelement)
+                .resultOrPartial(parsed -> Constants.LOG.warn("Failed to parse component '{}': {}", text, parsed))
+                .orElse(null);
     }
 
     public static Component parseColoredText(String text) {
@@ -89,7 +80,7 @@ public class TextUtils {
             text = text.substring(1, text.length() - 1);
         }
 
-        MutableComponent result = fromString(text);
+        Component result = fromString(text);
         if (result == null) {
             result = Component.literal(text);
         }

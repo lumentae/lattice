@@ -1,5 +1,7 @@
 package dev.lumentae.lattice;
 
+import dev.lumentae.lattice.packet.ClientboundRulesPacket;
+import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -39,8 +41,16 @@ public class EventHandler {
         Event.OnCommandRegister(event.getDispatcher());
     }
 
-    public static void handleDataOnMain(final ServerboundModSharePacket data, final IPayloadContext context) {
+    public static void handleDataForModShare(final ServerboundModSharePacket data, final IPayloadContext context) {
         context.enqueueWork(() -> Event.OnModSharePacket(data));
+    }
+
+    public static void handleDataForAcceptedRules(final ServerboundAcceptedRulesPacket data, final IPayloadContext context) {
+        context.enqueueWork(() -> Event.OnAcceptedRulesPacket(data, (ServerPlayer) context.player()));
+    }
+
+    public static void handleDataForRules(final ClientboundRulesPacket data, final IPayloadContext context) {
+        context.enqueueWork(() -> Event.OnRulesPacket(data));
     }
 
     @SubscribeEvent
@@ -49,7 +59,17 @@ public class EventHandler {
         registrar.commonToServer(
                 ServerboundModSharePacket.TYPE,
                 ServerboundModSharePacket.STREAM_CODEC,
-                EventHandler::handleDataOnMain
+                EventHandler::handleDataForModShare
+        );
+        registrar.commonToServer(
+                ServerboundAcceptedRulesPacket.TYPE,
+                ServerboundAcceptedRulesPacket.STREAM_CODEC,
+                EventHandler::handleDataForAcceptedRules
+        );
+        registrar.commonToClient(
+                ClientboundRulesPacket.TYPE,
+                ClientboundRulesPacket.STREAM_CODEC,
+                EventHandler::handleDataForRules
         );
     }
 }

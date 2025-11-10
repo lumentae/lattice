@@ -70,6 +70,11 @@ public class Config {
      */
     public ArrayList<String> offlineMotdPlayerNames;
 
+    /*
+     * A list of rules to be displayed to players when they join the server
+     */
+    public ArrayList<String> rules = new ArrayList<>();
+
     /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class PlayerPlayOptions {

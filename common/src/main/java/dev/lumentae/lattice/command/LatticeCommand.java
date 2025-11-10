@@ -108,6 +108,7 @@ public class LatticeCommand implements ICommand {
                                     switch (subActionArg) {
                                         case "enable":
                                             Config.getPlayerPlayOptions(searchedPlayer.getUUID()).acceptedRules = true;
+                                            Config.saveConfig();
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.enabled")
                                                     .append(searchedPlayer.getName())
                                                     .append(Component.translatable("message.lattice.now"))
@@ -115,6 +116,7 @@ public class LatticeCommand implements ICommand {
                                             break;
                                         case "disable":
                                             Config.getPlayerPlayOptions(searchedPlayer.getUUID()).acceptedRules = false;
+                                            Config.saveConfig();
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.disabled")
                                                     .append(searchedPlayer.getName())
                                                     .append(Component.translatable("message.lattice.now"))
@@ -131,6 +133,7 @@ public class LatticeCommand implements ICommand {
                                     switch (subActionArg) {
                                         case "enable":
                                             Config.getPlayerPlayOptions(searchedPlayer.getUUID()).enablePvP = true;
+                                            Config.saveConfig();
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.enabled")
                                                     .append(searchedPlayer.getName())
                                                     .append(Component.translatable("message.lattice.now"))
@@ -138,6 +141,7 @@ public class LatticeCommand implements ICommand {
                                             break;
                                         case "disable":
                                             Config.getPlayerPlayOptions(searchedPlayer.getUUID()).enablePvP = false;
+                                            Config.saveConfig();
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.disabled")
                                                     .append(searchedPlayer.getName())
                                                     .append(Component.translatable("message.lattice.now"))

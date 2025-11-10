@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 public class Mod {
     private static MinecraftServer _server;
     public static boolean usesDurability = false;
+    public static boolean viewingRules = false;
 
     public static MinecraftServer getServer() {
         return _server;
