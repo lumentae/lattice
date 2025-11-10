@@ -32,7 +32,7 @@ public class DecoratorManager implements ChatDecorator {
                 .append(
                         Component.literal(playerName)
                         .withStyle(
-                                Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, serverPlayer.getName()))
+                                Style.EMPTY.withHoverEvent(new HoverEvent.ShowText(serverPlayer.getName()))
                         )
                 )
                 .append(Component.literal("> ")

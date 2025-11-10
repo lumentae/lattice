@@ -25,13 +25,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public boolean isDevelopmentEnvironment() {
-        return !FMLLoader.isProduction();
-    }
-
-    @Override
     public Path getConfigDirectory() {
-        return FMLLoader.getGamePath().resolve("config").resolve(Constants.MOD_ID);
+        return FMLLoader.getCurrent().getGameDir().resolve("config").resolve(Constants.MOD_ID);
     }
 
     @Override
@@ -50,6 +45,6 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public String getSide() {
-        return FMLLoader.getDist().toString().toLowerCase();
+        return FMLLoader.getCurrent().getDist().toString().toLowerCase();
     }
 }

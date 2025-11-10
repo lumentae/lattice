@@ -68,7 +68,7 @@ public class Event {
 
     public static void OnJoin(ServerGamePacketListenerImpl handler) {
         ServerPlayer player = handler.getPlayer();
-        if (player.level().isClientSide) return;
+        if (player.level().isClientSide()) return;
 
         Config.INSTANCE.playerOptions.computeIfAbsent(player.getUUID(), k -> Config.DEFAULT_PLAY_OPTIONS);
         if (Config.INSTANCE.serverOpenDate.after(new Date()) && !player.hasPermissions(2)) {
@@ -229,15 +229,16 @@ public class Event {
             illegalMods.addAll(packet.resourcePacks().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
 
             ServerPlayer player = Utils.getPlayerByUUID(UUID.fromString(packet.origin()));
-            if (player != null) {
-                Component reason = Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
-                        .append(Component.literal("\n- "))
-                        .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED));
+            if (player == null)
+                return;
 
-                ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(reason);
-                player.connection.send(kickPacket);
-                player.connection.disconnect(reason);
-            }
+            Component reason = Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
+                    .append(Component.literal("\n- "))
+                    .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED));
+
+            ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(reason);
+            player.connection.send(kickPacket);
+            player.connection.disconnect(reason);
         }
     }
 

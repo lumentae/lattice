@@ -1,9 +1,15 @@
 package dev.lumentae.lattice.util;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
 import dev.lumentae.lattice.Constants;
 import dev.lumentae.lattice.Mod;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +65,18 @@ public class TextUtils {
     }
 
     public static MutableComponent fromString(String text) {
-        return Component.Serializer.fromJson(text, Mod.getServer().registryAccess());
+        return fromJson(text, Mod.getServer().registryAccess());
+    }
+
+    // From Component.Serializer
+    public static MutableComponent fromJson(String json, HolderLookup.Provider registries) {
+        JsonElement jsonelement = JsonParser.parseString(json);
+        return jsonelement == null ? null : deserialize(jsonelement, registries);
+    }
+
+    // From Component.Serializer
+    public static MutableComponent deserialize(JsonElement json, HolderLookup.Provider provider) {
+        return (MutableComponent) ComponentSerialization.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), json).getOrThrow(JsonParseException::new);
     }
 
     public static Component parseColoredText(String text) {
