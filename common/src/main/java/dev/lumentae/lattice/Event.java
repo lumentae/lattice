@@ -229,15 +229,16 @@ public class Event {
             illegalMods.addAll(packet.resourcePacks().replace('|', '\n').lines().filter(Utils::containsIllegalMods).toList());
 
             ServerPlayer player = Utils.getPlayerByUUID(UUID.fromString(packet.origin()));
-            if (player != null) {
-                Component reason = Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
-                        .append(Component.literal("\n- "))
-                        .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED));
+            if (player == null)
+                return;
 
-                ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(reason);
-                player.connection.send(kickPacket);
-                player.connection.disconnect(reason);
-            }
+            Component reason = Component.translatable("message.lattice.illegal_mods").withStyle(ChatFormatting.RED)
+                    .append(Component.literal("\n- "))
+                    .append(Component.literal(String.join("\n- ", illegalMods)).withStyle(ChatFormatting.RED));
+
+            ClientboundDisconnectPacket kickPacket = new ClientboundDisconnectPacket(reason);
+            player.connection.send(kickPacket);
+            player.connection.disconnect(reason);
         }
     }
 

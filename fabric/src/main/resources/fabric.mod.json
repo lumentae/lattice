@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "dev.lumentae.lattice.Lattice"
+    ],
+    "client": [
+      "dev.lumentae.lattice.LatticeClient"
     ]
   },
   "mixins": [
@@ -28,8 +31,5 @@
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=${java_version}"
-  },
-  "suggests": {
-    "another-mod": "*"
   }
 }

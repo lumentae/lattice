@@ -1,7 +1,5 @@
 package dev.lumentae.lattice;
 
-import dev.lumentae.lattice.packet.ServerboundModSharePacket;
-import dev.lumentae.lattice.util.PacketUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,6 +15,6 @@ public class LatticeClient {
 
     @SubscribeEvent
     public static void onClientLogin(ClientPlayerNetworkEvent.LoggingIn event) {
-        PacketUtils.sendToServer(ServerboundModSharePacket.create(event.getPlayer()));
+        Event.OnShareMods(event.getPlayer());
     }
 }

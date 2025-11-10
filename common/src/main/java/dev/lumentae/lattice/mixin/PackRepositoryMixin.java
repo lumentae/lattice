@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PackRepositoryMixin {
     @Inject(method = "reload", at = @At("HEAD"))
     public void lattice$reload(CallbackInfo ci) {
-        if (Minecraft.getInstance().player != null)
-            Event.OnShareMods(Minecraft.getInstance().player);
+        if (Minecraft.getInstance().player == null)
+            return;
+
+        Event.OnShareMods(Minecraft.getInstance().player);
     }
 }
