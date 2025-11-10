@@ -70,18 +70,6 @@ public class Config {
      */
     public ArrayList<String> offlineMotdPlayerNames;
 
-    public static void loadConfig() {
-        try {
-            // Create a config file if it doesn't exist
-            if (!configFilePath.toFile().exists()) {
-                Files.writeString(configFilePath, gson.toJson(new Config()));
-            }
-
-            INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
-        } catch (IOException ignored) {
-        }
-    }
-
     /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class PlayerPlayOptions {
@@ -120,10 +108,6 @@ public class Config {
             .serializeNulls()
             .create();
 
-    public static PlayerPlayOptions getPlayerPlayOptions(UUID uuid) {
-        return INSTANCE.playerOptions.computeIfAbsent(uuid, k -> new PlayerPlayOptions());
-    }
-
     public static void saveConfig() {
         try {
             Files.writeString(configFilePath, gson.toJson(INSTANCE));
@@ -131,15 +115,24 @@ public class Config {
         }
     }
 
+    public static void loadConfig() {
+        try {
+            // Create a config file if it doesn't exist
+            if (!configFilePath.toFile().exists()) {
+                Files.writeString(configFilePath, gson.toJson(new Config()));
+            }
+
+            INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
+        } catch (IOException ignored) {
+        }
+    }
+
+    public static PlayerPlayOptions getPlayerPlayOptions(UUID uuid) {
+        return INSTANCE.playerOptions.computeIfAbsent(uuid, k -> new PlayerPlayOptions());
+    }
+
     public static void setPlayerPlayOptions(UUID uuid, PlayerPlayOptions options) {
         INSTANCE.playerOptions.put(uuid, options);
         saveConfig();
     }
-
-    public static void removePlayerPlayOptions(UUID uuid) {
-        INSTANCE.playerOptions.remove(uuid);
-        saveConfig();
-    }
-
-
 }

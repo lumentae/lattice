@@ -28,6 +28,8 @@ public class LatticeCommand implements ICommand {
                             builder.suggest("config");
                             builder.suggest("status");
                             builder.suggest("nick");
+                            builder.suggest("rules");
+                            builder.suggest("pvp");
                             return builder.buildFuture();
                         })
                         .then(subCommand(dispatcher))
@@ -44,7 +46,7 @@ public class LatticeCommand implements ICommand {
                             builder.suggest("save");
                             builder.suggest("reload");
                             break;
-                        case "status", "nick":
+                        case "status", "nick", "rules", "pvp":
                             for (ServerPlayer player : Mod.getServer().getPlayerList().getPlayers()) {
                                 builder.suggest(player.getName().getString());
                             }
@@ -58,6 +60,10 @@ public class LatticeCommand implements ICommand {
                             switch (action) {
                                 case "status", "nick":
                                     builder.suggest("remove");
+                                    break;
+                                case "rules", "pvp":
+                                    builder.suggest("enable");
+                                    builder.suggest("disable");
                                     break;
                             }
                             return builder.buildFuture();
@@ -79,7 +85,8 @@ public class LatticeCommand implements ICommand {
                                         default:
                                             StatusManager.setStatus(searchedPlayer, subActionArg);
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.status.set")
-                                                    .append(StatusManager.getStatus(searchedPlayer)));
+                                                    .append(StatusManager.getStatus(searchedPlayer))
+                                            );
                                             break;
                                     }
                                     break;
@@ -92,8 +99,55 @@ public class LatticeCommand implements ICommand {
                                         default:
                                             NicknameManager.setNickname(searchedPlayer, subActionArg);
                                             TextUtils.sendMessage(player, Component.translatable("message.lattice.nickname.set")
-                                                    .append(NicknameManager.getNickname(searchedPlayer)));
+                                                    .append(NicknameManager.getNickname(searchedPlayer))
+                                            );
                                             break;
+                                    }
+                                    break;
+                                case "rules":
+                                    switch (subActionArg) {
+                                        case "enable":
+                                            Config.getPlayerPlayOptions(searchedPlayer.getUUID()).acceptedRules = true;
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.enabled")
+                                                    .append(searchedPlayer.getName())
+                                                    .append(Component.translatable("message.lattice.now"))
+                                            );
+                                            break;
+                                        case "disable":
+                                            Config.getPlayerPlayOptions(searchedPlayer.getUUID()).acceptedRules = false;
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.disabled")
+                                                    .append(searchedPlayer.getName())
+                                                    .append(Component.translatable("message.lattice.now"))
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subActionArg)
+                                                    .withStyle(ChatFormatting.RED)
+                                            );
+                                    }
+                                    break;
+                                case "pvp":
+                                    switch (subActionArg) {
+                                        case "enable":
+                                            Config.getPlayerPlayOptions(searchedPlayer.getUUID()).enablePvP = true;
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.enabled")
+                                                    .append(searchedPlayer.getName())
+                                                    .append(Component.translatable("message.lattice.now"))
+                                            );
+                                            break;
+                                        case "disable":
+                                            Config.getPlayerPlayOptions(searchedPlayer.getUUID()).enablePvP = false;
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.disabled")
+                                                    .append(searchedPlayer.getName())
+                                                    .append(Component.translatable("message.lattice.now"))
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subActionArg)
+                                                    .withStyle(ChatFormatting.RED)
+                                            );
                                     }
                                     break;
                                 default:
@@ -142,14 +196,40 @@ public class LatticeCommand implements ICommand {
                                 default:
                                     TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
                                             .append(subAction)
-                                            .withStyle(ChatFormatting.RED));
+                                            .withStyle(ChatFormatting.RED)
+                                    );
                                     break;
                             }
+                            break;
+                        case "rules":
+                            boolean acceptedRules = Config.getPlayerPlayOptions(player.getUUID()).acceptedRules;
+                            if (acceptedRules) {
+                                TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.enabled")
+                                        .append(player.getName())
+                                );
+                                break;
+                            }
+                            TextUtils.sendMessage(player, Component.translatable("message.lattice.rules.disabled")
+                                    .append(player.getName())
+                            );
+                            break;
+                        case "pvp":
+                            boolean enablePvP = Config.getPlayerPlayOptions(player.getUUID()).enablePvP;
+                            if (enablePvP) {
+                                TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.enabled")
+                                        .append(player.getName())
+                                );
+                                break;
+                            }
+                            TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.disabled")
+                                    .append(player.getName())
+                            );
                             break;
                         default:
                             TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
                                     .append(subAction)
-                                    .withStyle(ChatFormatting.RED));
+                                    .withStyle(ChatFormatting.RED)
+                            );
                             break;
                     }
 
