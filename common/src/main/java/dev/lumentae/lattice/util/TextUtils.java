@@ -21,7 +21,7 @@ public class TextUtils {
                 .append(Component.literal(" ")).withStyle(ChatFormatting.RESET)
                 .append(Component.literal("» ").withStyle(ChatFormatting.GRAY));
 
-        player.sendSystemMessage(startComponent.append(message.withStyle(ChatFormatting.WHITE)));
+        player.sendSystemMessage(startComponent.append(message));
     }
 
     public static MutableComponent createGradient(String text, int startColor, int endColor, boolean bold) {

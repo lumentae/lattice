@@ -14,7 +14,7 @@ public class NicknameManager {
     public static String getNickname(ServerPlayer player) {
         String nickName = Config.getPlayerPlayOptions(player.getUUID()).nickname;
         String playerName = player.getName().getString();
-        if (nickName == null) {
+        if (nickName == null || nickName.isEmpty()) {
             nickName = playerName;
         }
 
@@ -26,7 +26,7 @@ public class NicknameManager {
 
     public static void removeNickname(ServerPlayer player) {
         Config.PlayerPlayOptions options = Config.getPlayerPlayOptions(player.getUUID());
-        options.nickname = null;
+        options.nickname = "";
 
         Config.setPlayerPlayOptions(player.getUUID(), options);
     }
