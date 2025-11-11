@@ -88,3 +88,26 @@ Below is a list of all available commands and their functionality:
     - Nickname
     - Status message
     - Rules enabled/disabled
+
+## Configuring the rulebook
+
+To configure the rulebook, you need to manually edit the `config.json` file.
+Example:
+
+```json
+"rules": [
+"{\"text\":\"Rule 1\",\"color\":\"aqua\"}",
+"{\"text\":\"Rule 2\",\"color\":\"red\"}",
+"{\"text\":\"Rule 3\",\"color\":\"aqua\"}",
+"{\"text\":\"Rule 4\",\"color\":\"blue\"}",
+"[{\"text\":\"I accept these rules\",\"click_event\":{\"action\":\"change_page\",\"page\":10000},\"color\":\"green\"},\n{\"text\":\"I don't accept these rules\",\"click_event\":{\"action\":\"change_page\",\"page\":5000},\"color\":\"red\"}]"
+],
+```
+
+Each entry in the `rules` array is a JSON object.  
+You have to use a JSON text component for each rule.  
+I recommend using [this website](https://minecraft.tools/en/book.php) to create a book to create the book easier, but do
+keep in mind that the generated JSON will need some adjustments to work properly in the config file.  
+For example, the website generates a click event as `clickEvent` but it needs to be `click_event` in the config file.  
+You can also modify what the player should click to accept or decline the rules by going to a page with a high number (
+e.g., 10000) and a low number (e.g., 5000) respectively.
