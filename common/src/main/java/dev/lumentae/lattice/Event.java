@@ -27,8 +27,8 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.DispenserBlock;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +68,7 @@ public class Event {
         if (player.level().isClientSide()) return;
 
         Config.INSTANCE.playerOptions.computeIfAbsent(player.getUUID(), k -> Config.DEFAULT_PLAY_OPTIONS);
-        if (Config.INSTANCE.serverOpenDate.after(new Date()) && !player.hasPermissions(2)) {
+        if (Config.INSTANCE.serverOpenDate.isAfter(LocalDateTime.now()) && !player.hasPermissions(2)) {
             var reason = Component.translatable("message.lattice.server.closed.1")
                     .append(Component.translatable("message.lattice.server.closed.2"))
                     .append(MutableComponent.create(

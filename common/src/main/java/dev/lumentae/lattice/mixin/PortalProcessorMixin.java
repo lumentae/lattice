@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Mixin(PortalProcessor.class)
 public class PortalProcessorMixin {
@@ -35,9 +35,9 @@ public class PortalProcessorMixin {
 
         ResourceKey<Level> newDimension = transition.newLevel().dimension();
         boolean isInClosedDimension = (
-                newDimension == Level.END && Config.INSTANCE.endOpenDate.after(new Date())
+                newDimension == Level.END && Config.INSTANCE.endOpenDate.isAfter(LocalDateTime.now())
         ) || (
-                newDimension == Level.NETHER && Config.INSTANCE.netherOpenDate.after(new Date())
+                newDimension == Level.NETHER && Config.INSTANCE.netherOpenDate.isAfter(LocalDateTime.now())
         );
 
         if (isInClosedDimension && entity instanceof ServerPlayer player) {

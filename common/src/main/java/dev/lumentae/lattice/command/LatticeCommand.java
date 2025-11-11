@@ -15,6 +15,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.time.LocalDateTime;
+
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -25,11 +27,16 @@ public class LatticeCommand implements ICommand {
                 .requires(source -> source.hasPermission(2))
                 .then(argument("action", StringArgumentType.word())
                         .suggests((context, builder) -> {
+                            builder.suggest("allowed");
                             builder.suggest("config");
-                            builder.suggest("status");
+                            builder.suggest("help");
+                            builder.suggest("motd");
                             builder.suggest("nick");
-                            builder.suggest("rules");
+                            builder.suggest("open");
+                            builder.suggest("illegal");
                             builder.suggest("pvp");
+                            builder.suggest("rules");
+                            builder.suggest("status");
                             return builder.buildFuture();
                         })
                         .then(subCommand(dispatcher))
@@ -43,18 +50,23 @@ public class LatticeCommand implements ICommand {
                     String action = StringArgumentType.getString(context, "action");
                     switch (action) {
                         case "config":
-                            builder.suggest("save");
                             builder.suggest("reload");
+                            builder.suggest("save");
                             break;
                         case "status", "nick", "rules", "pvp":
                             for (ServerPlayer player : Mod.getServer().getPlayerList().getPlayers()) {
                                 builder.suggest(player.getName().getString());
                             }
                             break;
-                        case "motd":
-                            builder.suggest("set");
-                            builder.suggest("remove");
+                        case "motd", "illegal", "allowed":
+                            builder.suggest("add");
                             builder.suggest("list");
+                            builder.suggest("remove");
+                            break;
+                        case "open":
+                            builder.suggest("end");
+                            builder.suggest("nether");
+                            builder.suggest("server");
                             break;
                     }
                     return builder.buildFuture();
@@ -62,13 +74,35 @@ public class LatticeCommand implements ICommand {
                 .then(argument("subActionArg", StringArgumentType.greedyString())
                         .suggests((context, builder) -> {
                             String action = StringArgumentType.getString(context, "action");
+                            String subAction = StringArgumentType.getString(context, "subAction");
                             switch (action) {
                                 case "status", "nick":
                                     builder.suggest("remove");
                                     break;
                                 case "rules", "pvp":
-                                    builder.suggest("enable");
                                     builder.suggest("disable");
+                                    builder.suggest("enable");
+                                    break;
+                                case "open":
+                                    builder.suggest(LocalDateTime.now().toString());
+                                    switch (subAction) {
+                                        case "nether":
+                                            builder.suggest(Config.INSTANCE.netherOpenDate.toString());
+                                            break;
+                                        case "end":
+                                            builder.suggest(Config.INSTANCE.endOpenDate.toString());
+                                            break;
+                                        case "server":
+                                            builder.suggest(Config.INSTANCE.serverOpenDate.toString());
+                                            break;
+                                    }
+                                    break;
+                                case "motd":
+                                    if (subAction.equals("remove")) {
+                                        for (String motd : Config.INSTANCE.motds) {
+                                            builder.suggest(motd);
+                                        }
+                                    }
                                     break;
                             }
                             return builder.buildFuture();
@@ -159,6 +193,106 @@ public class LatticeCommand implements ICommand {
                                             );
                                     }
                                     break;
+                                case "illegal":
+                                    switch (subAction) {
+                                        case "add":
+                                            Config.INSTANCE.illegalMods.add(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.add")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        case "remove":
+                                            Config.INSTANCE.illegalMods.remove(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.remove")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subAction)
+                                                    .withStyle(ChatFormatting.RED));
+                                            break;
+                                    }
+                                    break;
+                                case "allowed":
+                                    switch (subAction) {
+                                        case "add":
+                                            Config.INSTANCE.allowedMods.add(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.add")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        case "remove":
+                                            Config.INSTANCE.allowedMods.remove(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.remove")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subAction)
+                                                    .withStyle(ChatFormatting.RED));
+                                            break;
+                                    }
+                                    break;
+                                case "open":
+                                    LocalDateTime parsed = TextUtils.parseDateString(subActionArg);
+                                    switch (subAction) {
+                                        case "nether":
+                                            Config.INSTANCE.netherOpenDate = parsed;
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.open.set")
+                                                    .append(parsed.toString())
+                                            );
+                                            break;
+                                        case "end":
+                                            Config.INSTANCE.endOpenDate = parsed;
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.open.set")
+                                                    .append(parsed.toString())
+                                            );
+                                            break;
+                                        case "server":
+                                            Config.INSTANCE.serverOpenDate = parsed;
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.open.set")
+                                                    .append(parsed.toString())
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subAction)
+                                                    .withStyle(ChatFormatting.RED));
+                                            break;
+                                    }
+                                    break;
+                                case "motd":
+                                    switch (subAction) {
+                                        case "add":
+                                            Config.INSTANCE.motds.add(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.add")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        case "remove":
+                                            Config.INSTANCE.motds.remove(subActionArg);
+                                            Config.saveConfig();
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.remove")
+                                                    .append(subActionArg)
+                                            );
+                                            break;
+                                        default:
+                                            TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                                    .append(subAction)
+                                                    .withStyle(ChatFormatting.RED));
+                                            break;
+                                    }
+                                    break;
                                 default:
                                     TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
                                             .append(subAction)
@@ -233,6 +367,51 @@ public class LatticeCommand implements ICommand {
                             TextUtils.sendMessage(player, Component.translatable("message.lattice.pvp.disabled")
                                     .append(player.getName())
                             );
+                            break;
+                        case "motd":
+                            switch (subAction) {
+                                case "list":
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.list")
+                                            .append(String.join("\n- ", Config.INSTANCE.motds))
+                                    );
+                                    break;
+                                default:
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                            .append(subAction)
+                                            .withStyle(ChatFormatting.RED)
+                                    );
+                                    break;
+                            }
+                            break;
+                        case "allowed":
+                            switch (subAction) {
+                                case "list":
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.list")
+                                            .append(String.join("\n- ", Config.INSTANCE.allowedMods))
+                                    );
+                                    break;
+                                default:
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                            .append(subAction)
+                                            .withStyle(ChatFormatting.RED)
+                                    );
+                                    break;
+                            }
+                            break;
+                        case "illegal":
+                            switch (subAction) {
+                                case "list":
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.list")
+                                            .append(String.join("\n- ", Config.INSTANCE.illegalMods))
+                                    );
+                                    break;
+                                default:
+                                    TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")
+                                            .append(subAction)
+                                            .withStyle(ChatFormatting.RED)
+                                    );
+                                    break;
+                            }
                             break;
                         default:
                             TextUtils.sendMessage(player, Component.translatable("message.lattice.lattice.unknown")

@@ -1,13 +1,14 @@
 package dev.lumentae.lattice;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import dev.lumentae.lattice.platform.Services;
+import dev.lumentae.lattice.util.TextUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Config {
@@ -25,24 +26,25 @@ public class Config {
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
 
+    public static Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .serializeNulls()
+            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext)
+                    -> TextUtils.parseDateString(json.getAsJsonPrimitive().getAsString()))
+            .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context)
+                    -> new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
+            .create();
     /**
      * The date when the server will be opened
      */
-    public Date serverOpenDate = Date.from(Instant.now());
-
+    public LocalDateTime serverOpenDate = LocalDateTime.now();
     /**
      * The date when the end will be opened
      * <p>
      * This is set to 10 days after the server is opened
      */
-    public Date endOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 10));
-
-    /**
-     * The date when the nether will be opened
-     * <p>
-     * This is set to 2 days after the server is opened
-     */
-    public Date netherOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 2));
+    public LocalDateTime endOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 10);
 
     /**
      * A list of illegal mods that should not be allowed
@@ -117,15 +119,16 @@ public class Config {
 
     public static Path configPath = Services.PLATFORM.getConfigDirectory();
     public static Path configFilePath = configPath.resolve("config.json");
-    public static Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .setDateFormat("yyyy-MM-dd HH:mm:ss")
-            .serializeNulls()
-            .create();
+    /**
+     * The date when the nether will be opened
+     * <p>
+     * This is set to 2 days after the server is opened
+     */
+    public LocalDateTime netherOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 2);
 
     public static void saveConfig() {
         try {
-            Files.writeString(configFilePath, gson.toJson(INSTANCE));
+            Files.writeString(configFilePath, GSON.toJson(INSTANCE));
         } catch (IOException ignored) {
         }
     }
@@ -134,10 +137,10 @@ public class Config {
         try {
             // Create a config file if it doesn't exist
             if (!configFilePath.toFile().exists()) {
-                Files.writeString(configFilePath, gson.toJson(new Config()));
+                Files.writeString(configFilePath, GSON.toJson(new Config()));
             }
 
-            INSTANCE = gson.fromJson(Files.readString(configFilePath), Config.class);
+            INSTANCE = GSON.fromJson(Files.readString(configFilePath), Config.class);
         } catch (IOException ignored) {
         }
     }

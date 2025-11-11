@@ -40,10 +40,10 @@ Below is a list of all available commands and their functionality:
         - `add` - Adds a new MOTD
         - `remove` - Removes a MOTD
         - `list` - Lists all MOTDs
-    - `illegal` - Manage illegal mods
-        - `add` - Adds a new illegal mod
-        - `remove` - Removes an illegal mod
-        - `list` - Lists all illegal mods
+  - `<illegal|allowed>` - Manage illegal and allowed mods
+      - `add` - Adds a new mod to the list
+      - `remove` - Removes a mod from the list
+      - `list` - Lists all mods in the list
     - `pvp` - Manage PvP settings
         - `<player>` - Specifies the player
             - `<enable|disable>` - Enables or disables PvP for the specified player

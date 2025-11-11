@@ -12,6 +12,11 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StrictJsonParser;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class TextUtils {
     public static void sendMessage(ServerPlayer player, MutableComponent message) {
         MutableComponent startComponent =
@@ -85,5 +90,18 @@ public class TextUtils {
             result = Component.literal(text);
         }
         return result;
+    }
+
+    public static LocalDateTime parseDateString(String text) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        try {
+            return LocalDateTime.parse(text, formatter);
+        } catch (DateTimeParseException e) {
+            try {
+                return LocalDateTime.parse(text);
+            } catch (DateTimeParseException ex) {
+                return ZonedDateTime.parse(text).toLocalDateTime();
+            }
+        }
     }
 }
