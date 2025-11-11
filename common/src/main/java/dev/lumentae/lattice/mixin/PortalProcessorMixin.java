@@ -4,6 +4,7 @@ import dev.lumentae.lattice.Config;
 import dev.lumentae.lattice.util.TextUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -32,10 +33,20 @@ public class PortalProcessorMixin {
         TeleportTransition transition = this.portal.getPortalDestination(level, entity, this.entryPosition);
         assert transition != null;
 
-        if (transition.newLevel().dimension() == Level.END && Config.INSTANCE.endOpenDate.after(new Date()) && entity instanceof ServerPlayer player) {
-            TextUtils.sendMessage(player, Component.translatable("message.lattice.end_closed")
-                    .append(" ")
-                    .append(Component.literal(String.valueOf(Config.INSTANCE.endOpenDate))
+        ResourceKey<Level> newDimension = transition.newLevel().dimension();
+        boolean isInClosedDimension = (
+                newDimension == Level.END && Config.INSTANCE.endOpenDate.after(new Date())
+        ) || (
+                newDimension == Level.NETHER && Config.INSTANCE.netherOpenDate.after(new Date())
+        );
+
+        if (isInClosedDimension && entity instanceof ServerPlayer player) {
+            String date = newDimension == Level.END
+                    ? String.valueOf(Config.INSTANCE.endOpenDate)
+                    : String.valueOf(Config.INSTANCE.netherOpenDate);
+
+            TextUtils.sendMessage(player, Component.translatable("message.lattice.dimension_closed")
+                    .append(Component.literal(date)
                             .withStyle(
                                     (style) -> style.withItalic(true)
                             )

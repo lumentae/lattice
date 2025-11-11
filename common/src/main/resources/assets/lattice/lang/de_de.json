@@ -3,7 +3,7 @@
   "message.lattice.config.save": "Config gespeichert",
   "message.lattice.death.1": "Du bist bei ",
   "message.lattice.death.2": " gestorben!",
-  "message.lattice.end_closed": "Das Ende ist momentan geschlossen! Es öffnet am ",
+  "message.lattice.dimension_closed": "Das Ende ist momentan geschlossen! Es öffnet am ",
   "message.lattice.illegal_mods": "Du benutzt illegale Cheats. Bitte entferne die folgenden Mods/Resource Packs:",
   "message.lattice.lattice.unknown": "Unbekannte Aktion: ",
   "message.lattice.nickname.none": "Du hast keinen Nickname gesetzt",

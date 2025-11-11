@@ -3,7 +3,7 @@
   "message.lattice.config.save": "Config saved",
   "message.lattice.death.1": "You died at ",
   "message.lattice.death.2": "!",
-  "message.lattice.end_closed": "The end is currently closed! It will open at",
+  "message.lattice.dimension_closed": "This dimension is currently closed! It will open at ",
   "message.lattice.illegal_mods": "You're using illegal cheats. Please remove the following mods/resource packs:",
   "message.lattice.lattice.unknown": "Unknown action: ",
   "message.lattice.nickname.none": "No nickname is set",

@@ -1,6 +1,7 @@
 # Lattice
 
-Lattice is a Minecraft mod intended to be used on SMP servers to manage many useful features for players
+Lattice is a Minecraft mod intended to be used on SMP servers to manage many useful features for players.  
+For it to work, it needs to be installed on the server and the client.
 
 ## Features
 - Player nickname and status management
@@ -10,7 +11,8 @@ Lattice is a Minecraft mod intended to be used on SMP servers to manage many use
 - Detection of illegal/cheat mods
 - Decorators for enhanced in-game experience (e.g., time/status decorators)
 - Configurable PvP settings per player
-- Server and end opening dates
+- Server, end and nether opening dates
+- Rules need to be accepted by players to play
 
 ## Commands
 Below is a list of all available commands and their functionality:
@@ -29,7 +31,6 @@ Below is a list of all available commands and their functionality:
 - If called without arguments, shows your current status message
 
 ### `/lattice <action> [subAction] [subActionArg]`
-
 - **Performs administrative actions** (requires permission level 2)
 - Available actions:
     - `config` - Manage server configuration
@@ -73,7 +74,7 @@ Below is a list of all available commands and their functionality:
 
 ## Configuration
 - Config file is stored as `config.json` under lattice in the server config directory
-- You can change the time, when the end or the server will be opened
+- You can change the time when the end or the server will be opened
 - MOTDs and a list of illegal mods can be configured
 - Each player has configurable options:
   - PvP enabled/disabled

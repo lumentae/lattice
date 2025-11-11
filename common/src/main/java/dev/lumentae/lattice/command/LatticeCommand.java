@@ -51,6 +51,11 @@ public class LatticeCommand implements ICommand {
                                 builder.suggest(player.getName().getString());
                             }
                             break;
+                        case "motd":
+                            builder.suggest("set");
+                            builder.suggest("remove");
+                            builder.suggest("list");
+                            break;
                     }
                     return builder.buildFuture();
                 })

@@ -24,16 +24,26 @@ public class Config {
      * These options will be used if a player does not have any option set
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
+
     /**
      * The date when the server will be opened
      */
     public Date serverOpenDate = Date.from(Instant.now());
+
     /**
      * The date when the end will be opened
      * <p>
      * This is set to 10 days after the server is opened
      */
     public Date endOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 10));
+
+    /**
+     * The date when the nether will be opened
+     * <p>
+     * This is set to 2 days after the server is opened
+     */
+    public Date netherOpenDate = Date.from(serverOpenDate.toInstant().plusSeconds(60 * 60 * 24 * 2));
+
     /**
      * A list of illegal mods that should not be allowed
      */
