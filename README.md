@@ -4,6 +4,7 @@ Lattice is a Minecraft mod intended to be used on SMP servers to manage many use
 For it to work, it needs to be installed on the server and the client.
 
 ## Features
+
 - Player nickname and status management
 - Night vision toggle for players
 - Server configuration management (save/reload)
@@ -15,22 +16,27 @@ For it to work, it needs to be installed on the server and the client.
 - Rules need to be accepted by players to play
 
 ## Commands
+
 Below is a list of all available commands and their functionality:
 
 ### `/nv`
+
 - **Toggles Night Vision**
 
 ### `/nick [nickname]`
+
 - **Sets or removes your nickname**
 - If you pass your actual Minecraft name as the nickname, your nickname is removed
 - If called without arguments, shows your current nickname
 
 ### `/status [<status>|reset]`
+
 - **Changes your status message**
 - If you pass `reset` as the status, your status is removed
 - If called without arguments, shows your current status message
 
 ### `/lattice <action> [subAction] [subActionArg]`
+
 - **Performs administrative actions** (requires permission level 2)
 - Available actions:
     - `config` - Manage server configuration
@@ -73,11 +79,12 @@ Below is a list of all available commands and their functionality:
     - `/lattice status PlayerName COOL`
 
 ## Configuration
+
 - Config file is stored as `config.json` under lattice in the server config directory
 - You can change the time when the end or the server will be opened
 - MOTDs and a list of illegal mods can be configured
 - Each player has configurable options:
-  - PvP enabled/disabled
-  - Nickname
-  - Status message
-  - Rules enabled/disabled
+    - PvP enabled/disabled
+    - Nickname
+    - Status message
+    - Rules enabled/disabled

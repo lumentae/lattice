@@ -12,9 +12,12 @@ import dev.lumentae.lattice.status.StatusManager;
 import dev.lumentae.lattice.util.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 import static net.minecraft.commands.Commands.argument;
@@ -30,14 +33,29 @@ public class LatticeCommand implements ICommand {
                             builder.suggest("allowed");
                             builder.suggest("config");
                             builder.suggest("help");
+                            builder.suggest("illegal");
                             builder.suggest("motd");
                             builder.suggest("nick");
                             builder.suggest("open");
-                            builder.suggest("illegal");
                             builder.suggest("pvp");
                             builder.suggest("rules");
                             builder.suggest("status");
                             return builder.buildFuture();
+                        })
+                        .executes(commandContext -> {
+                            String action = StringArgumentType.getString(commandContext, "action");
+                            ServerPlayer player = commandContext.getSource().getPlayer();
+                            if (!action.equals("help")) return Command.SINGLE_SUCCESS;
+
+                            TextUtils.sendMessage(player, Component.translatable("message.lattice.help")
+                                    .withStyle(
+                                            Style.EMPTY.withClickEvent(
+                                                    new ClickEvent.OpenUrl(URI.create("https://github.com/lumentae/lattice"))
+                                            )
+                                    )
+                                    .withStyle(ChatFormatting.UNDERLINE)
+                            );
+                            return Command.SINGLE_SUCCESS;
                         })
                         .then(subCommand(dispatcher))
                 )
