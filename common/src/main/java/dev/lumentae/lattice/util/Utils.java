@@ -3,10 +3,6 @@ package dev.lumentae.lattice.util;
 import dev.lumentae.lattice.Config;
 import dev.lumentae.lattice.Mod;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -17,10 +13,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
-    public static ServerLevel getDimension(ResourceLocation resourceLocation) {
-        return Mod.getServer().getLevel(ResourceKey.create(Registries.DIMENSION, resourceLocation));
-    }
-
     public static String getPlayerNameByUUID(UUID playerUUID) {
         AtomicReference<String> returnVal = new AtomicReference<>(playerUUID.toString());
         Objects.requireNonNull(

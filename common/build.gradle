@@ -14,9 +14,6 @@ neoForge {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version
     }
-    dependencies {
-        compileOnly("net.kyori:adventure-platform-mod-shared:6.0.0")
-    }
 }
 
 dependencies {

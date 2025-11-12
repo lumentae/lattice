@@ -22,15 +22,6 @@ pluginManagement {
             url = "https://jitpack.io"
         }
     }
-    resolutionStrategy {
-        eachPlugin {
-            switch (requested.id.id) {
-                case "com.replaymod.preprocess": {
-                    useModule("com.github.replaymod:preprocessor:${requested.version}")
-                }
-            }
-        }
-    }
 }
 
 plugins {
