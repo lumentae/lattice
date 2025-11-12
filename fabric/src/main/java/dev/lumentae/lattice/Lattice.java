@@ -1,8 +1,8 @@
 package dev.lumentae.lattice;
 
+import dev.lumentae.lattice.packet.ClientboundRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
-import dev.lumentae.lattice.platform.Services;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
@@ -16,8 +16,9 @@ public class Lattice implements ModInitializer {
     public void onInitialize() {
         Mod.init();
 
-        PayloadTypeRegistry.configurationC2S().register(ServerboundModSharePacket.TYPE, ServerboundModSharePacket.STREAM_CODEC);
         PayloadTypeRegistry.playC2S().register(ServerboundModSharePacket.TYPE, ServerboundModSharePacket.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(ServerboundAcceptedRulesPacket.TYPE, ServerboundAcceptedRulesPacket.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundRulesPacket.TYPE, ClientboundRulesPacket.STREAM_CODEC);
 
         ServerLifecycleEvents.SERVER_STARTED.register(Event::OnServerStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(Event::OnServerStopping);
@@ -25,9 +26,6 @@ public class Lattice implements ModInitializer {
             Event.OnRespawn(newPlayer);
         });
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            if (Services.PLATFORM.getSide().equals("client")) {
-                Event.OnShareMods(handler.getPlayer());
-            }
             Event.OnJoin(handler);
         });
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

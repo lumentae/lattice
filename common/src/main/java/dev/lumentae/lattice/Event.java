@@ -8,11 +8,8 @@ import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import dev.lumentae.lattice.platform.Services;
 import dev.lumentae.lattice.util.PacketUtils;
-import dev.lumentae.lattice.util.TextUtils;
 import dev.lumentae.lattice.util.Utils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
@@ -29,7 +26,6 @@ import net.minecraft.world.level.block.DispenserBlock;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Event {
@@ -116,23 +112,6 @@ public class Event {
 
     public static void OnShareMods(Player player) {
         PacketUtils.sendToServer(ServerboundModSharePacket.create(player));
-    }
-
-    public static void OnRulesPacket(ClientboundRulesPacket data) {
-        List<String> ruleStrings = List.of(data.rules().split("\0"));
-        List<Component> rules = new ArrayList<>();
-        for (String rule : ruleStrings) {
-            Component parsed = TextUtils.fromString(rule);
-            if (parsed == null) {
-                Constants.LOG.warn("Failed to parse rule: {}", rule);
-                continue;
-            }
-            rules.add(parsed);
-        }
-
-        BookViewScreen.BookAccess bookviewscreen$bookaccess = new BookViewScreen.BookAccess(rules);
-        Mod.viewingRules = true;
-        Minecraft.getInstance().setScreen(new BookViewScreen(bookviewscreen$bookaccess));
     }
 
     public static void OnAcceptedRulesPacket(ServerboundAcceptedRulesPacket data, ServerPlayer player) {

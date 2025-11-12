@@ -50,7 +50,7 @@ public class EventHandler {
     }
 
     public static void handleDataForRules(final ClientboundRulesPacket data, final IPayloadContext context) {
-        context.enqueueWork(() -> Event.OnRulesPacket(data));
+        context.enqueueWork(() -> ClientEvent.OnRulesPacket(data));
     }
 
     @SubscribeEvent

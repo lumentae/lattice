@@ -87,7 +87,7 @@ public class HopperBlockEntityMixin {
 
     // pick up items
     @Inject(method = "addItem(Lnet/minecraft/world/Container;Lnet/minecraft/world/entity/item/ItemEntity;)Z", at = @At("HEAD"), cancellable = true)
-    private static void addItem(Container container, ItemEntity itemEntity, CallbackInfoReturnable<Boolean> cir) {
+    private static void lattice$pickup(Container container, ItemEntity itemEntity, CallbackInfoReturnable<Boolean> cir) {
         if (!(container instanceof HopperBlockEntity hopperBlockEntity) || hopperBlockEntity.getCustomName() == null) {
             return;
         }
@@ -104,14 +104,13 @@ public class HopperBlockEntityMixin {
 
     // transfer items
     @Inject(method = "addItem(Lnet/minecraft/world/Container;Lnet/minecraft/world/Container;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Direction;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
-    private static void addItem(Container container, Container container2, ItemStack itemStack, Direction direction, CallbackInfoReturnable<ItemStack> cir) {
+    private static void lattice$transfer(Container container, Container container2, ItemStack itemStack, Direction direction, CallbackInfoReturnable<ItemStack> cir) {
         if (!(container2 instanceof HopperBlockEntity hopperBlockEntity) || hopperBlockEntity.getCustomName() == null) {
             return;
         }
         String itemCustomName = "";
-        assert itemStack.getEntityRepresentation() != null;
-        if (itemStack.getEntityRepresentation().getCustomName() != null) {
-            itemCustomName = itemStack.getEntityRepresentation().getCustomName().getString();
+        if (itemStack.getCustomName() != null) {
+            itemCustomName = itemStack.getCustomName().getString();
         }
         if (lattice$filterMatch(hopperBlockEntity.getCustomName().getString(), lattice$getItemName(itemStack.getItem().getDescriptionId()), itemCustomName)) {
             return;

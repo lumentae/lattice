@@ -14,5 +14,7 @@ jobs:
       java-version: 21
       mod-name: ${{ github.event.repository.name }}
   release:
+    permissions:
+      contents: write
     needs: build
     uses: lumentae/actions/.github/workflows/release.yml@main

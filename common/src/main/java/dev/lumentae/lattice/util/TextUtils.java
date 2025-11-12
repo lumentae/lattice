@@ -68,11 +68,19 @@ public class TextUtils {
     }
 
     public static Component fromString(String text) {
-        JsonElement jsonelement = StrictJsonParser.parse(text);
-        return ComponentSerialization.CODEC
-                .parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), jsonelement)
-                .resultOrPartial(parsed -> Constants.LOG.warn("Failed to parse component '{}': {}", text, parsed))
-                .orElse(null);
+        Component result;
+        try {
+            JsonElement jsonelement = StrictJsonParser.parse(text);
+            result = ComponentSerialization.CODEC
+                    .parse(RegistryAccess.EMPTY.createSerializationContext(JsonOps.INSTANCE), jsonelement)
+                    .resultOrPartial(parsed -> Constants.LOG.warn("Failed to parse component '{}': {}", text, parsed))
+                    .orElse(null);
+        } catch (Exception e) {
+            Constants.LOG.warn("Failed to parse component '{}': {}", text, e.getMessage());
+            result = Component.literal(text);
+        }
+
+        return result;
     }
 
     public static Component parseColoredText(String text) {

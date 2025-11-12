@@ -11,6 +11,6 @@ public class LatticeClient implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             Event.OnShareMods(client.player);
         });
-        ClientPlayNetworking.registerGlobalReceiver(ClientboundRulesPacket.TYPE, (payload, context) -> Event.OnRulesPacket(payload));
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundRulesPacket.TYPE, (payload, context) -> ClientEvent.OnRulesPacket(payload));
     }
 }

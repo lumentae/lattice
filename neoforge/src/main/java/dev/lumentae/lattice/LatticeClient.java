@@ -10,7 +10,8 @@ import net.neoforged.neoforge.common.NeoForge;
 public class LatticeClient {
     public LatticeClient(IEventBus eventBus) {
         NeoForge.EVENT_BUS.addListener(LatticeClient::onClientLogin);
-        Mod.init();
+        Config.configPath.toFile().mkdirs();
+        Config.loadConfig();
     }
 
     @SubscribeEvent
