@@ -76,7 +76,7 @@ public class Event {
             handler.send(packet);
         }
 
-        if (!Config.getPlayerPlayOptions(player.getUUID()).acceptedRules)
+        if (!Config.INSTANCE.rules.isEmpty() && !Config.getPlayerPlayOptions(player.getUUID()).acceptedRules)
             PacketUtils.sendToClient(player, ClientboundRulesPacket.create());
     }
 

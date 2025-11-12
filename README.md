@@ -100,8 +100,8 @@ Example:
 "{\"text\":\"Rule 2\",\"color\":\"red\"}",
 "{\"text\":\"Rule 3\",\"color\":\"aqua\"}",
 "{\"text\":\"Rule 4\",\"color\":\"blue\"}",
-"[{\"text\":\"I accept these rules\",\"click_event\":{\"action\":\"change_page\",\"page\":10000},\"color\":\"green\"},\n{\"text\":\"I don't accept these rules\",\"click_event\":{\"action\":\"change_page\",\"page\":5000},\"color\":\"red\"}]"
-],
+"[\"\",{\"text\":\"Do you accept these rules?\\n\"},{\"text\":\"[\\u2713]\",\"color\":\"green\",\"click_event\":{\"action\":\"change_page\",\"page\":10000}},{\"text\":\" \",\"color\":\"reset\"},{\"text\":\"[\\u2717]\",\"color\":\"red\",\"click_event\":{\"action\":\"change_page\",\"page\":5000}}]"
+]
 ```
 
 Each entry in the `rules` array is a JSON object.  
