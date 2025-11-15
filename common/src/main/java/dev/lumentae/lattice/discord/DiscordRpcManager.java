@@ -1,0 +1,119 @@
+package dev.lumentae.lattice.discord;
+
+import dev.caoimhe.jdiscordipc.JDiscordIPC;
+import dev.caoimhe.jdiscordipc.activity.model.Activity;
+import dev.caoimhe.jdiscordipc.activity.model.ActivityBuilder;
+import dev.caoimhe.jdiscordipc.activity.model.ActivityTimestamps;
+import dev.caoimhe.jdiscordipc.activity.model.ActivityType;
+import dev.caoimhe.jdiscordipc.activity.model.party.ActivityPartyPrivacy;
+import dev.caoimhe.jdiscordipc.event.DiscordEventListener;
+import dev.caoimhe.jdiscordipc.event.model.ReadyEvent;
+import dev.caoimhe.jdiscordipc.exception.JDiscordIPCException;
+import dev.caoimhe.jdiscordipc.modern.socket.ModernSystemSocketFactory;
+import dev.lumentae.lattice.ClientEvent;
+import dev.lumentae.lattice.Constants;
+import dev.lumentae.lattice.Mod;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class DiscordRpcManager implements DiscordEventListener {
+    private static final Timer timer = new Timer();
+    private static TimerTask task;
+    private static JDiscordIPC jDiscordIPC;
+    private static Activity activity;
+
+    public static void initialize(DiscordRpcConfiguration rpcConfiguration) {
+        jDiscordIPC = JDiscordIPC.builder(rpcConfiguration.applicationId())
+                .systemSocketFactory(new ModernSystemSocketFactory())
+                .build();
+
+        updateActivity(rpcConfiguration);
+
+        try {
+            jDiscordIPC.connect();
+        } catch (final JDiscordIPCException.DiscordClientUnavailableException e) {
+            System.err.println("Failed to connect to a Discord client.");
+        }
+
+        jDiscordIPC.registerEventListener(new DiscordRpcManager());
+
+        timer.scheduleAtFixedRate(task = new TimerTask() {
+            @Override
+            public void run() {
+                updateActivity(rpcConfiguration);
+            }
+        }, 0, 10000);
+    }
+
+    public static void updateActivity(DiscordRpcConfiguration rpcConfiguration) {
+        try {
+            ActivityBuilder activityBuilder = Activity.builder()
+                    .details(rpcConfiguration.details())
+                    .state(rpcConfiguration.state())
+                    .assets((assets) -> {
+                        if (!rpcConfiguration.smallImageKey().isEmpty() && !rpcConfiguration.smallImageText().isEmpty())
+                            assets.smallImage(rpcConfiguration.smallImageKey(), rpcConfiguration.smallImageText());
+
+                        if (!rpcConfiguration.largeImageKey().isEmpty() && !rpcConfiguration.largeImageText().isEmpty())
+                            assets.largeImage(rpcConfiguration.largeImageKey(), rpcConfiguration.largeImageText());
+                    })
+                    .timestamps(ActivityTimestamps.from(Mod.START_TIME))
+                    .type(ActivityType.PLAYING);
+
+            if (ClientEvent.client.getConnection() != null) {
+                int maxPlayers;
+                String ip = "Singleplayer";
+                if (ClientEvent.client.getCurrentServer() != null) {
+                    maxPlayers = Objects.requireNonNull(ClientEvent.client.getCurrentServer().players).max();
+                    ip = "on " + Objects.requireNonNull(ClientEvent.client.getCurrentServer()).ip;
+                } else {
+                    maxPlayers = 1;
+                }
+
+                assert ClientEvent.client.player != null;
+                activityBuilder = activityBuilder
+                        .party("party", ClientEvent.client.getConnection().getOnlinePlayers().size(), (builder) -> {
+                            builder.maximumSize(maxPlayers);
+                            builder.privacy(ActivityPartyPrivacy.PUBLIC);
+                        })
+                        .state("Playing " + ip)
+                        .details(getCorrectDimensionString(ClientEvent.client.player.level().dimension())
+                                        + " "
+                                        + Component.translatable("message.lattice.discord.at_coords",
+                                        (int) ClientEvent.client.player.getX(),
+                                        (int) ClientEvent.client.player.getY(),
+                                        (int) ClientEvent.client.player.getZ()
+                                ).getString()
+                        );
+            }
+
+            activity = activityBuilder.build();
+            jDiscordIPC.updateActivity(activity);
+        } catch (final Exception e) {
+            Constants.LOG.error("Failed to update Discord RPC activity", e);
+        }
+    }
+
+    private static String getCorrectDimensionString(ResourceKey<Level> dimension) {
+        switch (dimension.location().toString()) {
+            case "minecraft:overworld":
+                return Component.translatable("message.lattice.discord.in_overworld").getString();
+            case "minecraft:the_nether":
+                return Component.translatable("message.lattice.discord.in_nether").getString();
+            case "minecraft:the_end":
+                return Component.translatable("message.lattice.discord.in_end").getString();
+        }
+        return dimension.location().toString();
+    }
+
+    @Override
+    public void onReadyEvent(ReadyEvent event) {
+        Constants.LOG.info("Connected to Discord RPC.");
+        jDiscordIPC.updateActivity(activity);
+    }
+}

@@ -3,7 +3,7 @@ package dev.lumentae.lattice;
 import com.mojang.brigadier.CommandDispatcher;
 import dev.lumentae.lattice.command.ICommand;
 import dev.lumentae.lattice.dispenser.DispenserBehavior;
-import dev.lumentae.lattice.packet.ClientboundRulesPacket;
+import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import dev.lumentae.lattice.platform.Services;
@@ -76,8 +76,7 @@ public class Event {
             handler.send(packet);
         }
 
-        if (!Config.INSTANCE.rules.isEmpty() && !Config.getPlayerPlayOptions(player.getUUID()).acceptedRules)
-            PacketUtils.sendToClient(player, ClientboundRulesPacket.create());
+        PacketUtils.sendToClient(player, ClientboundConfigurationPacket.create(player, Config.INSTANCE.discordRpcConfiguration));
     }
 
     public static void OnCommandRegister(CommandDispatcher<CommandSourceStack> dispatcher) {

@@ -1,6 +1,8 @@
 package dev.lumentae.lattice;
 
-import dev.lumentae.lattice.packet.ClientboundRulesPacket;
+import dev.lumentae.lattice.discord.DiscordRpcConfiguration;
+import dev.lumentae.lattice.discord.DiscordRpcManager;
+import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.util.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
@@ -10,7 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientEvent {
-    public static void OnRulesPacket(ClientboundRulesPacket data) {
+    public static Minecraft client;
+
+    public static void OnConfigurationPacket(ClientboundConfigurationPacket data) {
         List<String> ruleStrings = List.of(data.rules().split("\0"));
         List<Component> rules = new ArrayList<>();
         for (String rule : ruleStrings) {
@@ -22,8 +26,18 @@ public class ClientEvent {
             rules.add(parsed);
         }
 
-        BookViewScreen.BookAccess bookviewscreen$bookaccess = new BookViewScreen.BookAccess(rules);
-        Mod.viewingRules = true;
-        Minecraft.getInstance().setScreen(new BookViewScreen(bookviewscreen$bookaccess));
+        if (!rules.isEmpty()) {
+            BookViewScreen.BookAccess bookviewscreen$bookaccess = new BookViewScreen.BookAccess(rules);
+            Mod.viewingRules = true;
+            Minecraft.getInstance().setScreen(new BookViewScreen(bookviewscreen$bookaccess));
+        }
+
+        DiscordRpcConfiguration rpcConfiguration = DiscordRpcConfiguration.fromString(data.discordRpcConfiguration());
+        DiscordRpcManager.updateActivity(rpcConfiguration);
+    }
+
+    public static void OnClientStarted(Minecraft client) {
+        ClientEvent.client = client;
+        DiscordRpcManager.initialize(Config.INSTANCE.discordRpcConfiguration);
     }
 }

@@ -1,0 +1,3 @@
+[submodule "JDiscordIPC"]
+	path = JDiscordIPC
+	url = https://github.com/lumentae/JDiscordIPC

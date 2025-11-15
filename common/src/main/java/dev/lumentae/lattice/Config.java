@@ -1,6 +1,7 @@
 package dev.lumentae.lattice;
 
 import com.google.gson.*;
+import dev.lumentae.lattice.discord.DiscordRpcConfiguration;
 import dev.lumentae.lattice.platform.Services;
 import dev.lumentae.lattice.util.TextUtils;
 
@@ -86,6 +87,20 @@ public class Config {
      * A list of rules to be displayed to players when they join the server
      */
     public ArrayList<String> rules = new ArrayList<>();
+
+    /*
+     * Discord RPC configuration
+     */
+    public DiscordRpcConfiguration discordRpcConfiguration = new DiscordRpcConfiguration(
+            true,
+            1439275936955633724L,
+            "Not playing...",
+            "",
+            "",
+            "",
+            "",
+            ""
+    );
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,6 +1,6 @@
 package dev.lumentae.lattice;
 
-import dev.lumentae.lattice.packet.ClientboundRulesPacket;
+import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,8 +49,8 @@ public class EventHandler {
         context.enqueueWork(() -> Event.OnAcceptedRulesPacket(data, (ServerPlayer) context.player()));
     }
 
-    public static void handleDataForRules(final ClientboundRulesPacket data, final IPayloadContext context) {
-        context.enqueueWork(() -> ClientEvent.OnRulesPacket(data));
+    public static void handleDataForRules(final ClientboundConfigurationPacket data, final IPayloadContext context) {
+        context.enqueueWork(() -> ClientEvent.OnConfigurationPacket(data));
     }
 
     @SubscribeEvent
@@ -67,8 +67,8 @@ public class EventHandler {
                 EventHandler::handleDataForAcceptedRules
         );
         registrar.commonToClient(
-                ClientboundRulesPacket.TYPE,
-                ClientboundRulesPacket.STREAM_CODEC,
+                ClientboundConfigurationPacket.TYPE,
+                ClientboundConfigurationPacket.STREAM_CODEC,
                 EventHandler::handleDataForRules
         );
     }

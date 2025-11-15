@@ -1,6 +1,6 @@
 package dev.lumentae.lattice;
 
-import dev.lumentae.lattice.packet.ClientboundRulesPacket;
+import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
 import dev.lumentae.lattice.packet.ServerboundModSharePacket;
 import net.fabricmc.api.ModInitializer;
@@ -18,7 +18,7 @@ public class Lattice implements ModInitializer {
 
         PayloadTypeRegistry.playC2S().register(ServerboundModSharePacket.TYPE, ServerboundModSharePacket.STREAM_CODEC);
         PayloadTypeRegistry.playC2S().register(ServerboundAcceptedRulesPacket.TYPE, ServerboundAcceptedRulesPacket.STREAM_CODEC);
-        PayloadTypeRegistry.playS2C().register(ClientboundRulesPacket.TYPE, ClientboundRulesPacket.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundConfigurationPacket.TYPE, ClientboundConfigurationPacket.STREAM_CODEC);
 
         ServerLifecycleEvents.SERVER_STARTED.register(Event::OnServerStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(Event::OnServerStopping);
