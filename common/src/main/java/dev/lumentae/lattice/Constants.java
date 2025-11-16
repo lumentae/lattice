@@ -12,6 +12,7 @@ public class Constants {
             new NightvisionCommand(),
             new LatticeCommand(),
             new NickCommand(),
-            new StatusCommand()
+            new StatusCommand(),
+            new HomeCommand()
     };
 }

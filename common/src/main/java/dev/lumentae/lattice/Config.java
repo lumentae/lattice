@@ -2,6 +2,7 @@ package dev.lumentae.lattice;
 
 import com.google.gson.*;
 import dev.lumentae.lattice.discord.DiscordRpcConfiguration;
+import dev.lumentae.lattice.home.Home;
 import dev.lumentae.lattice.platform.Services;
 import dev.lumentae.lattice.util.TextUtils;
 
@@ -126,6 +127,11 @@ public class Config {
          * Whether the player has accepted the rules
          */
         public boolean acceptedRules = false;
+
+        /**
+         * The player's homes
+         */
+        public List<Home> homes = new ArrayList<>();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

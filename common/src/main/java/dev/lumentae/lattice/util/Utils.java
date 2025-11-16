@@ -3,9 +3,13 @@ package dev.lumentae.lattice.util;
 import dev.lumentae.lattice.Config;
 import dev.lumentae.lattice.Mod;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Objects;
@@ -61,5 +65,24 @@ public class Utils {
 
     public static <T> T getRandom(List<T> obj) {
         return obj.get((int) (Math.random() * obj.size()));
+    }
+
+    public static ServerLevel getLevelFromResourceLocation(ResourceLocation location) {
+        if (location == null) return null;
+        switch (location.toString()) {
+            case "minecraft:overworld":
+                return Mod.getServer().getLevel(Level.OVERWORLD);
+            case "minecraft:the_nether":
+                return Mod.getServer().getLevel(Level.NETHER);
+            case "minecraft:the_end":
+                return Mod.getServer().getLevel(Level.END);
+            default:
+                for (ResourceKey<Level> key : Mod.getServer().levelKeys()) {
+                    if (key.location().equals(location)) {
+                        return Mod.getServer().getLevel(key);
+                    }
+                }
+        }
+        return null;
     }
 }
