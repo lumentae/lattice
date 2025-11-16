@@ -29,6 +29,7 @@ public class DiscordRpcManager implements DiscordEventListener {
     private static Activity activity;
 
     public static void initialize(DiscordRpcConfiguration rpcConfiguration) {
+        Constants.LOG.info("Initializing Discord RPC.");
         jDiscordIPC = JDiscordIPC.builder(rpcConfiguration.applicationId())
                 .systemSocketFactory(new ModernSystemSocketFactory())
                 .build();
@@ -39,7 +40,7 @@ public class DiscordRpcManager implements DiscordEventListener {
         try {
             jDiscordIPC.connect();
         } catch (final JDiscordIPCException.DiscordClientUnavailableException e) {
-            System.err.println("Failed to connect to a Discord client.");
+            Constants.LOG.error("Failed to connect to a Discord client.", e);
         }
 
         jDiscordIPC.registerEventListener(new DiscordRpcManager());
@@ -49,21 +50,23 @@ public class DiscordRpcManager implements DiscordEventListener {
             public void run() {
                 updateActivity();
             }
-        }, 0, 10000);
+        }, 0, 5000);
     }
 
     public static void updateActivity() {
-        DiscordRpcConfiguration rpcConfiguration = discordRpcConfiguration;
         try {
             ActivityBuilder activityBuilder = Activity.builder()
-                    .details(rpcConfiguration.details())
-                    .state(rpcConfiguration.state())
+                    .details(discordRpcConfiguration.details())
+                    .state(discordRpcConfiguration.state())
                     .assets((assets) -> {
-                        if (!rpcConfiguration.smallImageKey().isEmpty() && !rpcConfiguration.smallImageText().isEmpty())
-                            assets.smallImage(rpcConfiguration.smallImageKey(), rpcConfiguration.smallImageText());
+                        if (!discordRpcConfiguration.smallImageKey().isEmpty() && !discordRpcConfiguration.smallImageText().isEmpty()) {
+                            assets.smallImage(discordRpcConfiguration.smallImageKey(), discordRpcConfiguration.smallImageText());
+                        } else if (ClientEvent.client.player != null) {
+                            assets.smallImage("https://crafthead.net/helm/" + ClientEvent.client.player.getUUID(), ClientEvent.client.player.getDisplayName().getString());
+                        }
 
-                        if (!rpcConfiguration.largeImageKey().isEmpty() && !rpcConfiguration.largeImageText().isEmpty())
-                            assets.largeImage(rpcConfiguration.largeImageKey(), rpcConfiguration.largeImageText());
+                        if (!discordRpcConfiguration.largeImageKey().isEmpty() && !discordRpcConfiguration.largeImageText().isEmpty())
+                            assets.largeImage(discordRpcConfiguration.largeImageKey(), discordRpcConfiguration.largeImageText());
                     })
                     .timestamps(ActivityTimestamps.from(Mod.START_TIME))
                     .type(ActivityType.PLAYING);

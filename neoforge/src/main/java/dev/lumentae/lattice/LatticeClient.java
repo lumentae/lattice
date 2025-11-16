@@ -8,7 +8,7 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.lifecycle.ClientStartedEvent;
 
 @net.neoforged.fml.common.Mod(value = Constants.MOD_ID, dist = Dist.CLIENT)
-@EventBusSubscriber(modid = Constants.MOD_ID)
+@EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class LatticeClient {
     public LatticeClient(IEventBus eventBus) {
         Config.configPath.toFile().mkdirs();
@@ -27,7 +27,6 @@ public class LatticeClient {
 
     @SubscribeEvent
     public static void onClientStarted(ClientStartedEvent event) {
-        Constants.LOG.info("Lattice client started");
         ClientEvent.OnClientStarted(event.getClient());
     }
 }
