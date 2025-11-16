@@ -24,7 +24,6 @@ import java.util.TimerTask;
 public class DiscordRpcManager implements DiscordEventListener {
     private static final Timer timer = new Timer();
     public static DiscordRpcConfiguration discordRpcConfiguration;
-    private static TimerTask task;
     private static JDiscordIPC jDiscordIPC;
     private static Activity activity;
 
@@ -45,7 +44,7 @@ public class DiscordRpcManager implements DiscordEventListener {
 
         jDiscordIPC.registerEventListener(new DiscordRpcManager());
 
-        timer.scheduleAtFixedRate(task = new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 updateActivity();
