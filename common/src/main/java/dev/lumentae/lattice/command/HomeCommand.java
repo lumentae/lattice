@@ -58,7 +58,7 @@ public class HomeCommand implements ICommand {
                                 TextUtils.sendMessage(player, Component.translatable("message.lattice.home.exists", name).withStyle(ChatFormatting.RED));
                                 return 0;
                             }
-                            Home home = HomeManager.createHome(name, player);
+                            home = HomeManager.createHome(name, player);
                             TextUtils.sendMessage(player, Component.translatable("message.lattice.home.created", home.name()));
                             return Command.SINGLE_SUCCESS;
                         })
