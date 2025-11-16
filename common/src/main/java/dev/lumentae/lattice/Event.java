@@ -2,6 +2,7 @@ package dev.lumentae.lattice;
 
 import com.mojang.brigadier.CommandDispatcher;
 import dev.lumentae.lattice.command.ICommand;
+import dev.lumentae.lattice.discord.DiscordRpcManager;
 import dev.lumentae.lattice.dispenser.DispenserBehavior;
 import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
@@ -122,5 +123,10 @@ public class Event {
 
         Config.getPlayerPlayOptions(player.getUUID()).acceptedRules = true;
         Config.saveConfig();
+    }
+
+    public static void OnClientDisconnect() {
+        DiscordRpcManager.discordRpcConfiguration = Config.INSTANCE.discordRpcConfiguration;
+        DiscordRpcManager.updateActivity();
     }
 }

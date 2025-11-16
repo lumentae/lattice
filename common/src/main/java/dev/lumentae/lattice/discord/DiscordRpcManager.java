@@ -23,6 +23,7 @@ import java.util.TimerTask;
 
 public class DiscordRpcManager implements DiscordEventListener {
     private static final Timer timer = new Timer();
+    public static DiscordRpcConfiguration discordRpcConfiguration;
     private static TimerTask task;
     private static JDiscordIPC jDiscordIPC;
     private static Activity activity;
@@ -32,7 +33,8 @@ public class DiscordRpcManager implements DiscordEventListener {
                 .systemSocketFactory(new ModernSystemSocketFactory())
                 .build();
 
-        updateActivity(rpcConfiguration);
+        discordRpcConfiguration = rpcConfiguration;
+        updateActivity();
 
         try {
             jDiscordIPC.connect();
@@ -45,12 +47,13 @@ public class DiscordRpcManager implements DiscordEventListener {
         timer.scheduleAtFixedRate(task = new TimerTask() {
             @Override
             public void run() {
-                updateActivity(rpcConfiguration);
+                updateActivity();
             }
         }, 0, 10000);
     }
 
-    public static void updateActivity(DiscordRpcConfiguration rpcConfiguration) {
+    public static void updateActivity() {
+        DiscordRpcConfiguration rpcConfiguration = discordRpcConfiguration;
         try {
             ActivityBuilder activityBuilder = Activity.builder()
                     .details(rpcConfiguration.details())
@@ -69,7 +72,11 @@ public class DiscordRpcManager implements DiscordEventListener {
                 int maxPlayers;
                 String ip = "Singleplayer";
                 if (ClientEvent.client.getCurrentServer() != null) {
-                    maxPlayers = Objects.requireNonNull(ClientEvent.client.getCurrentServer().players).max();
+                    if (ClientEvent.client.getCurrentServer().players != null)
+                        maxPlayers = ClientEvent.client.getCurrentServer().players.max();
+                    else {
+                        maxPlayers = 1;
+                    }
                     ip = "on " + Objects.requireNonNull(ClientEvent.client.getCurrentServer()).ip;
                 } else {
                     maxPlayers = 1;
@@ -83,8 +90,8 @@ public class DiscordRpcManager implements DiscordEventListener {
                         })
                         .state("Playing " + ip)
                         .details(getCorrectDimensionString(ClientEvent.client.player.level().dimension())
-                                        + " "
-                                        + Component.translatable("message.lattice.discord.at_coords",
+                                + " "
+                                + Component.translatable("message.lattice.discord.at_coords",
                                         (int) ClientEvent.client.player.getX(),
                                         (int) ClientEvent.client.player.getY(),
                                         (int) ClientEvent.client.player.getZ()

@@ -21,6 +21,11 @@ public class LatticeClient {
     }
 
     @SubscribeEvent
+    public static void onClientDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
+        Event.OnClientDisconnect();
+    }
+
+    @SubscribeEvent
     public static void onClientStarted(ClientStartedEvent event) {
         Constants.LOG.info("Lattice client started");
         ClientEvent.OnClientStarted(event.getClient());

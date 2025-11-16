@@ -14,5 +14,6 @@ public class LatticeClient implements ClientModInitializer {
         });
         ClientPlayNetworking.registerGlobalReceiver(ClientboundConfigurationPacket.TYPE, (payload, context) -> ClientEvent.OnConfigurationPacket(payload));
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> ClientEvent.OnClientStarted(client));
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> Event.OnClientDisconnect());
     }
 }

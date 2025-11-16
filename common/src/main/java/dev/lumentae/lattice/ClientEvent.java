@@ -33,7 +33,8 @@ public class ClientEvent {
         }
 
         DiscordRpcConfiguration rpcConfiguration = DiscordRpcConfiguration.fromString(data.discordRpcConfiguration());
-        DiscordRpcManager.updateActivity(rpcConfiguration);
+        DiscordRpcManager.discordRpcConfiguration = rpcConfiguration;
+        DiscordRpcManager.updateActivity();
     }
 
     public static void OnClientStarted(Minecraft client) {
