@@ -14,6 +14,7 @@ For it to work, it needs to be installed on the server and the client.
 - Configurable PvP settings per player
 - Server, end and nether opening dates
 - Rules need to be accepted by players to play
+- Server configurable Discord RPC
 
 ## Commands
 
@@ -106,7 +107,7 @@ Example:
 
 Each entry in the `rules` array is a JSON object.  
 You have to use a JSON text component for each rule.  
-I recommend using [this website](https://minecraft.tools/en/book.php) to create a book to create the book easier, but do
+I recommend using [this website](https://minecraft.tools/en/book.php) to create it easier, but do
 keep in mind that the generated JSON will need some adjustments to work properly in the config file.  
 For example, the website generates a click event as `clickEvent` but it needs to be `click_event` in the config file.  
 You can also modify what the player should click to accept or decline the rules by going to a page with a high number (
@@ -114,8 +115,7 @@ e.g., 10000) and a low number (e.g., 5000) respectively.
 
 ## Known issues
 
-- The hopper sort doesn't work with lithium's hopper optimizations enabled. Please disable them in the lithium config if
-  you want to use hopper sorting. Add this to config/lithium.properties:
+- The hopper sort doesn't work with lithium's hopper optimizations enabled. Please disable them in the lithium config if you want to use hopper sorting. Add this to config/lithium.properties:
 
 ```
 mixin.block.hopper=false
