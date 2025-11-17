@@ -12,6 +12,7 @@ public class Mod {
     public static boolean usesDurability = false;
     public static boolean viewingRules = false;
     public static final Instant START_TIME = Instant.now();
+    public static boolean initialized = false;
 
     public static MinecraftServer getServer() {
         return _server;
@@ -21,9 +22,15 @@ public class Mod {
     }
 
     public static void init() {
+        if (initialized) return;
+        initialized = true;
         Config.configPath.toFile().mkdirs();
         Config.loadConfig();
         DecoratorManager.registerDecorator(new TimeDecorator());
         DecoratorManager.registerDecorator(new StatusDecorator());
+
+        Constants.LOG.info("Lattice initialized!");
+        if (Config.INSTANCE.vanillaMode)
+            Constants.LOG.warn("Lattice is running in vanilla mode! Some features will be disabled");
     }
 }

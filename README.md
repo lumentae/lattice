@@ -9,12 +9,12 @@ For it to work, it needs to be installed on the server and the client.
 - Night vision toggle for players
 - Server configuration management (save/reload)
 - Message of the Day (MOTD) rotation
-- Detection of illegal/cheat mods
+- Detection of illegal/cheat mods [Unavailable in Vanilla mode]
 - Decorators for enhanced in-game experience (e.g., time/status decorators)
 - Configurable PvP settings per player
 - Server, end and nether opening dates
-- Rules need to be accepted by players to play
-- Server configurable Discord RPC
+- Rules need to be accepted by players to play [Unavailable in Vanilla mode]
+- Server configurable Discord RPC [Unavailable in Vanilla mode]
 
 ## Commands
 
@@ -89,6 +89,7 @@ Below is a list of all available commands and their functionality:
     - Nickname
     - Status message
     - Rules enabled/disabled
+  - List of homes
 
 ## Configuring the rulebook
 
@@ -107,11 +108,19 @@ Example:
 
 Each entry in the `rules` array is a JSON object.  
 You have to use a JSON text component for each rule.  
-I recommend using [this website](https://minecraft.tools/en/book.php) to create it easier, but do
+I recommend using [this website](https://minecraft.tools/en/json_text.php) to create it easier, but do
 keep in mind that the generated JSON will need some adjustments to work properly in the config file.  
 For example, the website generates a click event as `clickEvent` but it needs to be `click_event` in the config file.  
 You can also modify what the player should click to accept or decline the rules by going to a page with a high number (
 e.g., 10000) and a low number (e.g., 5000) respectively.
+
+## Enabling Vanilla mode
+
+1. Shut down the server
+2. Open the `config/lattice/config.json` file
+3. Add `"vanillaMode": true,` to the file
+4. Start the server
+5. Great success!
 
 ## Known issues
 

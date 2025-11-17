@@ -55,6 +55,8 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
+        if (Config.INSTANCE.vanillaMode) return;
+
         final PayloadRegistrar registrar = event.registrar("1");
         registrar.commonToServer(
                 ServerboundModSharePacket.TYPE,

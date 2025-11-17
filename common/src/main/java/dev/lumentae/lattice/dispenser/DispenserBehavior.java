@@ -44,9 +44,9 @@ public class DispenserBehavior {
                 BlockState toBreak = level.getBlockState(relative);
 
                 // Check if the block can be broken with a pickaxe, axe or shovel
-                if (toBreak.is(BlockTags.MINEABLE_WITH_PICKAXE) || // Pickaxe
-                        toBreak.is(BlockTags.MINEABLE_WITH_AXE) ||     // Axe
-                        toBreak.is(BlockTags.MINEABLE_WITH_SHOVEL)) {  // Shovel
+                if (toBreak.is(BlockTags.MINEABLE_WITH_PICKAXE) ||    // Pickaxe
+                        toBreak.is(BlockTags.MINEABLE_WITH_AXE) ||    // Axe
+                        toBreak.is(BlockTags.MINEABLE_WITH_SHOVEL)) { // Shovel
 
                     manager.destroyBlock(relative);
 

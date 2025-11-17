@@ -28,6 +28,18 @@ public class Config {
      */
     public static PlayerPlayOptions DEFAULT_PLAY_OPTIONS = new PlayerPlayOptions();
 
+    /**
+     * The date when the server will be opened
+     */
+    public LocalDateTime serverOpenDate = LocalDateTime.now();
+
+    /**
+     * The date when the end will be opened
+     * <p>
+     * This is set to 10 days after the server is opened
+     */
+    public LocalDateTime endOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 10);
+
     public static Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -37,16 +49,6 @@ public class Config {
             .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context)
                     -> new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
             .create();
-    /**
-     * The date when the server will be opened
-     */
-    public LocalDateTime serverOpenDate = LocalDateTime.now();
-    /**
-     * The date when the end will be opened
-     * <p>
-     * This is set to 10 days after the server is opened
-     */
-    public LocalDateTime endOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 10);
 
     /**
      * A list of illegal mods that should not be allowed
@@ -102,6 +104,12 @@ public class Config {
             "",
             ""
     );
+    /**
+     * The date when the nether will be opened
+     * <p>
+     * This is set to 2 days after the server is opened
+     */
+    public LocalDateTime netherOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 2);
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -141,11 +149,9 @@ public class Config {
     public static Path configPath = Services.PLATFORM.getConfigDirectory();
     public static Path configFilePath = configPath.resolve("config.json");
     /**
-     * The date when the nether will be opened
-     * <p>
-     * This is set to 2 days after the server is opened
+     * Whether the server is in vanilla mode (no extra features)
      */
-    public LocalDateTime netherOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 2);
+    public boolean vanillaMode = false;
 
     public static void saveConfig() {
         try {

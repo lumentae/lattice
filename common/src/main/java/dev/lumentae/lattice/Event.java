@@ -77,7 +77,8 @@ public class Event {
             handler.send(packet);
         }
 
-        PacketUtils.sendToClient(player, ClientboundConfigurationPacket.create(player, Config.INSTANCE.discordRpcConfiguration));
+        if (!Config.INSTANCE.vanillaMode)
+            PacketUtils.sendToClient(player, ClientboundConfigurationPacket.create(player, Config.INSTANCE.discordRpcConfiguration));
     }
 
     public static void OnCommandRegister(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -111,7 +112,8 @@ public class Event {
     }
 
     public static void OnShareMods(Player player) {
-        PacketUtils.sendToServer(ServerboundModSharePacket.create(player));
+        if (!Config.INSTANCE.vanillaMode)
+            PacketUtils.sendToServer(ServerboundModSharePacket.create(player));
     }
 
     public static void OnAcceptedRulesPacket(ServerboundAcceptedRulesPacket data, ServerPlayer player) {
