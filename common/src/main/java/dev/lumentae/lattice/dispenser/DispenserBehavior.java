@@ -1,6 +1,6 @@
 package dev.lumentae.lattice.dispenser;
 
-import dev.lumentae.lattice.Mod;
+import dev.lumentae.lattice.Config;
 import dev.lumentae.lattice.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -51,7 +51,7 @@ public class DispenserBehavior {
                     manager.destroyBlock(relative);
 
                     // Reset durability
-                    if (!Mod.usesDurability) stack.setDamageValue(stack.getDamageValue() - 1);
+                    if (!Config.INSTANCE.dispenserUsesDurability) stack.setDamageValue(stack.getDamageValue() - 1);
                 }
             } else if (stack.getItem() instanceof BlockItem) {
                 // Place block on top if the front

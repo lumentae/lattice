@@ -40,16 +40,6 @@ public class Config {
      */
     public LocalDateTime endOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 10);
 
-    public static Gson GSON = new GsonBuilder()
-            .setPrettyPrinting()
-            .setDateFormat("yyyy-MM-dd HH:mm:ss")
-            .serializeNulls()
-            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext)
-                    -> TextUtils.parseDateString(json.getAsJsonPrimitive().getAsString()))
-            .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context)
-                    -> new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
-            .create();
-
     /**
      * A list of illegal mods that should not be allowed
      */
@@ -65,8 +55,7 @@ public class Config {
             "aristois",
             "bape",
             "xray",
-            "x-ray",
-            "freecam"
+            "x-ray"
     );
 
     /**
@@ -104,12 +93,28 @@ public class Config {
             "",
             ""
     );
+
     /**
      * The date when the nether will be opened
      * <p>
      * This is set to 2 days after the server is opened
      */
     public LocalDateTime netherOpenDate = serverOpenDate.plusSeconds(60 * 60 * 24 * 2);
+
+    /**
+     * Whether the server is in vanilla mode (no extra features)
+     */
+    public boolean vanillaMode = false;
+
+    /*
+     * Whether dispensers use durability
+     */
+    public boolean dispenserUsesDurability = true;
+
+    /*
+     * The Discord webhook URL to send messages to
+     */
+    public String discordWebhookURL = "";
 
     /// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -148,10 +153,16 @@ public class Config {
 
     public static Path configPath = Services.PLATFORM.getConfigDirectory();
     public static Path configFilePath = configPath.resolve("config.json");
-    /**
-     * Whether the server is in vanilla mode (no extra features)
-     */
-    public boolean vanillaMode = false;
+
+    public static Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .serializeNulls()
+            .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, jsonDeserializationContext)
+                    -> TextUtils.parseDateString(json.getAsJsonPrimitive().getAsString()))
+            .registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context)
+                    -> new JsonPrimitive(src.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))))
+            .create();
 
     public static void saveConfig() {
         try {

@@ -11,6 +11,7 @@
     "LeashableMixin",
     "LegacyQueryHandlerMixin",
     "MinecraftServerMixin",
+    "PlayerListMixin",
     "PortalProcessorMixin",
     "ServerGamePacketListenerImplMixin",
     "ServerPlayerMixin",

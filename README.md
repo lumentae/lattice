@@ -15,6 +15,7 @@ For it to work, it needs to be installed on the server and the client.
 - Server, end and nether opening dates
 - Rules need to be accepted by players to play [Unavailable in Vanilla mode]
 - Server configurable Discord RPC [Unavailable in Vanilla mode]
+- Discord bridge for chat messages
 
 ## Commands
 

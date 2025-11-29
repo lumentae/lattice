@@ -1,5 +1,6 @@
 package dev.lumentae.lattice.mixin;
 
+import dev.lumentae.lattice.Event;
 import dev.lumentae.lattice.Mod;
 import dev.lumentae.lattice.decorator.DecoratorManager;
 import dev.lumentae.lattice.util.Utils;
@@ -17,11 +18,12 @@ public abstract class ServerGamePacketListenerImplMixin {
     @Inject(method = "broadcastChatMessage", at = @At("HEAD"), cancellable = true)
     public void broadcastChatMessage(PlayerChatMessage playerChatMessage, CallbackInfo ci) {
         assert playerChatMessage.unsignedContent() != null;
+        Event.OnPlayerMessage(playerChatMessage);
         Mod.getServer().getPlayerList().broadcastSystemMessage(
                 DecoratorManager.DECORATOR.decorate(
                         Utils.getPlayerByUUID(playerChatMessage.sender()),
                         Component.literal(playerChatMessage.signedContent())
-                ), false);
+                ), player -> playerChatMessage.unsignedContent(), false);
         this.detectRateSpam();
         ci.cancel();
     }

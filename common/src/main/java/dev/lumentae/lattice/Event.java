@@ -3,6 +3,7 @@ package dev.lumentae.lattice;
 import com.mojang.brigadier.CommandDispatcher;
 import dev.lumentae.lattice.command.ICommand;
 import dev.lumentae.lattice.discord.DiscordRpcManager;
+import dev.lumentae.lattice.discord.webhook.WebhookMessage;
 import dev.lumentae.lattice.dispenser.DispenserBehavior;
 import dev.lumentae.lattice.packet.ClientboundConfigurationPacket;
 import dev.lumentae.lattice.packet.ServerboundAcceptedRulesPacket;
@@ -17,6 +18,7 @@ import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.protocol.common.ClientboundDisconnectPacket;
 import net.minecraft.server.MinecraftServer;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class Event {
     public static void OnServerStarted(MinecraftServer server) {
@@ -130,5 +133,25 @@ public class Event {
     public static void OnClientDisconnect() {
         DiscordRpcManager.discordRpcConfiguration = Config.INSTANCE.discordRpcConfiguration;
         DiscordRpcManager.updateActivity();
+    }
+
+    public static void OnPlayerMessage(PlayerChatMessage message) {
+        CompletableFuture.runAsync(() -> {
+            String username = Utils.getPlayerByUUID(message.sender()).getName().getString();
+            String messageString = message.signedContent();
+            String avatarUrl = "https://mc-heads.net/avatar/" + username;
+
+            Mod.webhook.send(new WebhookMessage(username, messageString, avatarUrl));
+        });
+    }
+
+    public static void OnGameMessage(Component message) {
+        CompletableFuture.runAsync(() -> {
+            String username = "Server";
+            String messageString = message.getString();
+            String avatarUrl = "https://minecraft.wiki/images/Java_Edition_icon_3.png";
+
+            Mod.webhook.send(new WebhookMessage(username, messageString, avatarUrl));
+        });
     }
 }

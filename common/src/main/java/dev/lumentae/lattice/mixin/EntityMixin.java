@@ -17,8 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityMixin {
     @Inject(method = "spawnAtLocation(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("RETURN"))
     public void lattice$spawnAtLocation(ServerLevel level, ItemStack stack, Vec3 offset, CallbackInfoReturnable<ItemEntity> cir) {
-        if (!stack.is(Blocks.DRAGON_EGG.asItem()) && level.dimension().equals(Level.END)) return;
-        setGlowingTag(cir.getReturnValue());
+        try {
+            if (!stack.is(Blocks.DRAGON_EGG.asItem()) && level.dimension().equals(Level.END)) return;
+            setGlowingTag(cir.getReturnValue());
+        } catch (Exception ignored) {
+        }
     }
 
     @Unique
