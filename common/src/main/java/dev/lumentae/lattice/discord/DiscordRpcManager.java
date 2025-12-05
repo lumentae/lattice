@@ -28,28 +28,25 @@ public class DiscordRpcManager implements DiscordEventListener {
     private static Activity activity;
 
     public static void initialize(DiscordRpcConfiguration rpcConfiguration) {
-        Constants.LOG.info("Initializing Discord RPC.");
-        jDiscordIPC = JDiscordIPC.builder(rpcConfiguration.applicationId())
-                .systemSocketFactory(new ModernSystemSocketFactory())
-                .build();
-
-        discordRpcConfiguration = rpcConfiguration;
-        updateActivity();
-
         try {
+            Constants.LOG.info("Initializing Discord RPC.");
+            jDiscordIPC = JDiscordIPC.builder(rpcConfiguration.applicationId())
+                    .systemSocketFactory(new ModernSystemSocketFactory())
+                    .build();
+
+            discordRpcConfiguration = rpcConfiguration;
             jDiscordIPC.connect();
+            jDiscordIPC.registerEventListener(new DiscordRpcManager());
+
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    updateActivity();
+                }
+            }, 0, 5000);
         } catch (final JDiscordIPCException.DiscordClientUnavailableException e) {
             Constants.LOG.error("Failed to connect to a Discord client.", e);
         }
-
-        jDiscordIPC.registerEventListener(new DiscordRpcManager());
-
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateActivity();
-            }
-        }, 0, 5000);
     }
 
     public static void updateActivity() {
